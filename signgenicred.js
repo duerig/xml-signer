@@ -41,8 +41,6 @@ function ($, sigExport) {
     event.preventDefault();
     var encryptedKey = $('#key').val();
     var password = $('#password').val();
-    console.dir(encryptedKey);
-    console.dir(password);
     var decrypted = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, password);
     var key = new RSAKey();
     key.readPrivateKeyFromASN1HexString(decrypted);
