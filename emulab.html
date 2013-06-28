@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Utah Emulab Login Required</title>
+
+  <link rel="shortcut icon" href="favicon.ico"/>
+  <link rel="stylesheet" style="text/css"
+        href="https://s3.amazonaws.com/lib-storage/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" style="text/css"
+        href="https://s3.amazonaws.com/lib-storage/bootstrap/css/bootstrap-responsive.min.css">
+  <script src="geni-auth.js"></script>
+  <script data-main="emulab" src="http://lib-storage.s3-website-us-east-1.amazonaws.com/require-jquery.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="hero-unit" id="need-credential">
+      <h1>Emulab Login Required</h1>
+      <h2>This is just a mockup. The fields don't do anything. Type in whatever you want and click login to proceed.</h2>
+      <p>The GENI Authorization App wants access to your encrypted certificate. You need to log in to Emulab below in order to grant permission.</p>
+      <form id="login">
+        <fieldset>
+          <input class="input-large" type="text" placeholder="Login Name">
+        </fieldset>
+        <fieldset>
+          <input class="input-large" type="text" placeholder="Password"
+        </fieldset>
+        <fieldset>
+          <button class="btn" id="login-button">Login</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

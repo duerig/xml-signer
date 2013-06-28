@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GENI Deluxe Tool</title>
+
+  <link rel="shortcut icon" href="favicon.ico"/>
+  <link rel="stylesheet" style="text/css"
+        href="https://s3.amazonaws.com/lib-storage/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" style="text/css"
+        href="https://s3.amazonaws.com/lib-storage/bootstrap/css/bootstrap-responsive.min.css">
+  <script src="https://s3.amazonaws.com/lib-storage/jquery-1.8.2.min.js"></script>
+  <script src="geni-auth.js"></script>
+  <script>
+    var myId = "asdfasdf";
+    function initialize()
+    {
+    $('#need-credential').show();
+    $('#have-credential').hide();
+    $('#authorize').click(function (event) {
+      event.preventDefault();
+      genilib.authorize(myId, complete);
+      return false;
+    });
+    }
+
+    function complete(credential)
+    {
+    $('#need-credential').hide();
+    $('#have-credential').show();
+    $('#credential').val(credential);
+    }
+    $(document).ready(initialize);
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="hero-unit" id="need-credential">
+      <h1>GENI Deluxe Tool</h1>
+      <p>Welcome to the GENI Deluxe Tool. This tool will use your credential to talk to GENI Aggregate Managers on your behalf. We have many great features as well.</p>
+      <p>Just <button id="authorize" class="btn btn-primary">Authorize</button> to get started.</p>
+    </div>
+    <div class="hero-unit" id="have-credential">
+      <h1>GENI Deluxe Tool</h1>
+      <h3>Authorization Complete</h3>
+      <p>Congratulations! Your authorization is complete. Please choose from the menu of options below.</p>
+      <form onsubmit="return false;">
+        <fieldset>
+          <button class="btn">Create Slice</button>
+          <button class="btn">Allocate Resources</button>
+          <button class="btn">Release Zombies</button>
+          <button class="btn">Deploy Orbiting Brain Lasers</button>
+        </fieldset>
+        <br>
+        <textarea id="credential" rows="20" class="input-xxlarge">Credential goes here</textarea>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
