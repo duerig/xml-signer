@@ -1,12 +1,13 @@
 
 var genilib = {};
-genilib.trustedHost = 'http://localhost:8080';
+//genilib.trustedHost = 'http://localhost:8080';
+genilib.trustedHost = 'https://www.emulab.net';
 
 genilib.authorize = function(id, callback)
 {
   var wrapper = {};
 
-  wrapper.other = window.open('index.html?id=' + id, 'GENI Tool Authorization',
+  wrapper.other = window.open('index.html?id=' + encodeURIComponent(id), 'GENI Tool Authorization',
                               'height=400,width=600');
 
   wrapper.listener = function (event) {

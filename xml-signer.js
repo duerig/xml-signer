@@ -21,6 +21,7 @@ function ($, _, sigExport, xmlText, noKeyText, authorizeText) {
 
   var toolId = "";
   var xmlTemplate = _.template(xmlText);
+  var authorizeTemplate = _.template(authorizeText);
   var xml = "";
   var encryptedKey = "";
   var certList = [];
@@ -103,7 +104,8 @@ function ($, _, sigExport, xmlText, noKeyText, authorizeText) {
 
   function initAuthorize()
   {
-    $('#main-content').html(authorizeText);
+    var content = authorizeTemplate({id: toolId});
+    $('#main-content').html(content);
     $('#sign').click(clickSign);
     $('#private').submit(clickSign);
     window.removeEventListener('message', messageCert);
@@ -159,16 +161,13 @@ function ($, _, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageCert(event)
   {
-    console.log('got message');
     if (event.source === certWindow && event.data && event.data.certificate)
     {
-      console.log('validated message');
       try {
         window.localStorage.certificate = event.data.certificate;
       } catch (e) {}
       parseCertificate(event.data.certificate);
       initAuthorize();
-      console.log('finished message');
     }
   }
 
