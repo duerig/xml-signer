@@ -3,7 +3,8 @@
 require.config({
   'paths': {
     'underscore': 'lib/underscore-min',
-    'jquery': 'require-jquery'
+    'jquery': 'require-jquery',
+    'bootstrap': 'lib/bootstrap/js/bootstrap.min'
   },
   'shim': {
     'underscore': {
@@ -12,10 +13,10 @@ require.config({
   }
 });
 
-require(['jquery', 'underscore', 'lib/xml-crypto/signed-xml',
+require(['jquery', 'underscore', 'error', 'lib/xml-crypto/signed-xml',
          'text!template/credential.txt', 'text!template/no-key.html',
-         'text!template/authorize.html'],
-function ($, _, sigExport, xmlText, noKeyText, authorizeText) {
+         'text!template/authorize.html', 'bootstrap'],
+function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
   'use strict';
   var SignedXml = sigExport.SignedXml;
 
