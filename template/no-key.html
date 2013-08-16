@@ -1,16 +1,34 @@
 <div class="hero-unit">
-  <h1>GENI Tool Authorization</h1>
-  <p>Your GENI Authorization is not yet setup. Please choose your Slice Authority from the list below to fetch your certificate.</p>
-  <form id="sa-form">
-    <select id="sa-choice">
-      <option>Choose your SA</option>
-      <option>Utah ProtoGENI</option>
-      <option>GENI Clearinghouse</option>
-      <option>ExoGENI SA</option>
-      <option>Another SA</option>
-      <option>Yet Another SA</option>
-      <option>Zombie SA of Doom</option>
-    </select>
-    <button id="sa-button" class="btn">Get Certificate</button>
+  <h1>GENI Authorization Tool</h1>
+  <p>The GENI Authorization Tool allows you to authorize applications to speak on your behalf to allocate slices or slivers. Your credentials are stored locally in your browser and your passphrase is never transmitted over the network.</p>
+  <p>Your GENI certificate is not yet setup. Please choose your Slice Authority from the list below to fetch your certificate.</p>
+  <form id="sa-form" class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-lg-2" for="sa-choice">Member Authority</label>
+      <div class="col-lg-4">
+        <select id="sa-choice" class="form-control">
+          <option value="">Choose your MA</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-offset-2 col-lg-10">
+        <button id="sa-button" class="btn btn-default">Get Certificate</button>
+      </div>
+    </div>
+  </form>
+  <h2>Or</h2>
+  <form id="paste-form" class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-lg-2" for="paste-input">Paste Certificate</label>
+      <div class="col-lg-10">
+        <textarea id="paste-input" class="form-control" rows="10" placeholder="Paste Certificate and Key Here..."></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-offset-2 col-lg-10">
+        <button id="paste-button" class="btn btn-default">Save Certificate</button>
+      </div>
+    </div>
   </form>
 </div>

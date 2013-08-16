@@ -1,12 +1,29 @@
 <div class="hero-unit">
-  <h1>GENI Tool Authorization</h1>
-  <p>To authorize, enter the passphrase for your GENI certificate below. Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
-  <h3>Tool URN: <%= id %></h3>
-  <div id="error-box"></div>
-  <form id="private">
-    <input id="password" type="password" placeholder="Passphrase" class="span8">
-    <fieldset>
-      <button id="sign" class="btn btn-primary">Authorize</button>
-    </fieldset>
+  <h1>GENI Authorization Tool</h1>
+  <p>The GENI Authorization Tool allows you to authorize applications to speak on your behalf to allocate slices or slivers. Your credentials are stored locally in your browser and your passphrase is never transmitted over the network.</p>
+  <p class="tool-info">To authorize, enter the passphrase for your GENI certificate below. Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
+  <h5 class="tool-info">Tool URN: <%= id %></h5>
+  <div class="tool-info" id="error-box"></div>
+  <form class="tool-info form-horizontal" role="form" id="private">
+    <div class="form-group">
+      <label class="col-lg-2 control-label" for="time">Duration (days)</label>
+      <div class="col-lg-10">
+        <input id="time" class="form-control" type="text" value="30">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-lg-2" for="password">Passphrase</label>
+      <div class="col-lg-10">
+        <input id="password" class="form-control" type="password" placeholder="Passphrase">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-offset-2 col-lg-10">
+        <button id="sign" class="btn btn-primary">Authorize</button>
+      </div>
+    </div>
   </form>
+  <h3 class="no-tool-info">Your Certificate is Saved.</h3>
+  <p class="no-tool-info">When you choose to authorize a tool, you will be redirected here to complete the process.</p>
+  <button id="logout" class="btn btn-default pull-right">Delete Certificate</button>
 </div>

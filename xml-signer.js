@@ -20,33 +20,79 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
   'use strict';
   var SignedXml = sigExport.SignedXml;
 
-  var toolId = "";
+  var singleDay = 1000*60*60*24;
+
+  var saList = [
+    {
+      name: 'Utah ProtoGENI',
+      url: 'https://www.emulab.net/getsslcertjs.php3'
+    },
+    {
+      name: 'Jonlab',
+      url: 'http://myboss.jonlab.testbed.emulab.net/getsslcertjs.php3'
+    }
+  ];
+
+  var toolId = null;
+  var speakerCert = null;
   var xmlTemplate = _.template(xmlText);
   var authorizeTemplate = _.template(authorizeText);
   var xml = "";
   var encryptedKey = "";
   var certList = [];
   var certWindow;
+  var userId = 'urn:publicid:IDN+jonlab.testbed.emulab.net+user+jld';
 
   function initialize()
   {
     var params = getQueryParams(window.location.search);
     toolId = params.id;
-    xml = xmlTemplate({'id': toolId});
-
-    var cert;
-    try {
-      cert = window.localStorage.certificate;
-    } catch (e) {}
-    if (cert)
+    if (toolId)
     {
-      parseCertificate(cert);
-      initAuthorize();
+      window.addEventListener('message', messageToolCert, false);
+      var data = {
+        ready: true
+      };
+      window.opener.postMessage(data, '*');
     }
     else
     {
-      initNoKey();
+      messageToolCert(null);
     }
+  }
+
+  function messageToolCert(event)
+  {
+    if (event && event.data.certificate)
+    {
+      speakerCert = event.data.certificate;
+    }
+    var cert;
+    try {
+      cert = JSON.parse(window.localStorage.certificateList)[0];
+    } catch (e) {}
+    if ((toolId && speakerCert)
+        || (! toolId && ! speakerCert))
+    {
+      if (cert)
+      {
+        parseCertificate(cert);
+        initAuthorize();
+      }
+      else
+      {
+        initNoKey();
+      }
+    }
+    else
+    {
+      flagError();
+    }
+  }
+
+  function flagError()
+  {
+    $('#main-content').html('<h1>Error</h1><p>There was an error initializing. Close this window and try again.</p>');
   }
 
   function parseCertificate(cert)
@@ -100,15 +146,38 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
     $('#main-content').html(noKeyText);
     $('#sa-form').submit(clickGetCert);
     $('#sa-button').click(clickGetCert);
+    $('#paste-form').submit(clickPasteCert);
+    $('#paste-button').click(clickPasteCert);
     window.addEventListener('message', messageCert);
+    var choice = $('#sa-choice');
+    var i = 0;
+    for (i = 0; i < saList.length; i += 1)
+    {
+      choice.append('<option value="' + saList[i].url + '">' + saList[i].name +
+                    '</option>');
+    }
   }
 
   function initAuthorize()
   {
-    var content = authorizeTemplate({id: toolId});
+    var fillId = '';
+    if (toolId)
+    {
+      fillId = toolId;
+    }
+    var content = authorizeTemplate({id: fillId});
     $('#main-content').html(content);
+    if (! toolId)
+    {
+      $('.tool-info').hide();
+    }
+    else
+    {
+      $('.no-tool-info').hide();
+    }
     $('#sign').click(clickSign);
     $('#private').submit(clickSign);
+    $('#logout').click(clickLogout);
     window.removeEventListener('message', messageCert);
     window.addEventListener('message', messageAck);
   }
@@ -116,7 +185,26 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
   function clickSign(event)
   {
     event.preventDefault();
-    //    var encryptedKey = $('#key').val();
+    var durationDays = parseInt($('#time').val(), 10);
+    var timeOffset = 30 * singleDay;
+    if (durationDays && durationDays > 0 && durationDays < 400)
+    {
+      timeOffset = durationDays * singleDay;
+    }
+    var e = new Date();
+    e.setTime(e.getTime() + timeOffset);
+    var eString = e.getUTCFullYear() + '-' +
+          (e.getUTCMonth()+1) + '-' +
+          e.getUTCDate() + 'T' +
+          e.getUTCHours() + ':' +
+          e.getUTCMinutes() + ':' +
+          e.getUTCSeconds() + 'Z';
+    var xml = xmlTemplate({'speaker_cert': speakerCert,
+                           'speaker_urn': toolId,
+                           'user_cert': certList[0],
+                           'user_urn': userId,
+                           'expires': eString});
+
     var password = $('#password').val();
     var decrypted = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, password);
     var key = new RSAKey();
@@ -130,7 +218,6 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
       sig.keyInfoProvider = new sigExport.StoredKeyInfo(certList[0]);
     }
     sig.computeSignature(xml);
-
     var data = {
       id: toolId,
       credential: sig.getSignedXml()
@@ -146,8 +233,23 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
     {
       certWindow.close();
     }
-    certWindow = window.open('emulab.html', 'Emulab Login',
-                             'height=400,width=600');
+    var url = $('#sa-choice').val();
+    if (url !== '')
+    {
+      certWindow = window.open(url, 'Slice Authority Credential',
+                               'height=400,width=600');
+    }
+    return false;
+  }
+
+  function clickPasteCert(event)
+  {
+    event.preventDefault();
+    var input = $('#paste-input');
+    if (input.val() !== '')
+    {
+      addCert(input.val());
+    }
     return false;
   }
 
@@ -164,12 +266,29 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
   {
     if (event.source === certWindow && event.data && event.data.certificate)
     {
-      try {
-        window.localStorage.certificate = event.data.certificate;
-      } catch (e) {}
-      parseCertificate(event.data.certificate);
-      initAuthorize();
+      addCert(event.data.certificate);
     }
+  }
+
+  function addCert(cert)
+  {
+    try {
+      window.localStorage.certificateList = JSON.stringify([cert]);
+    } catch (e) {}
+    parseCertificate(cert);
+    initAuthorize();
+  }
+
+  function clickLogout(event)
+  {
+    event.preventDefault();
+    try {
+      delete window.localStorage.certificateList;
+    } catch (e) {}
+    certList = [];
+    encryptedKey = "";
+    initNoKey();
+    return false;
   }
 
   function htmlEncode(value)

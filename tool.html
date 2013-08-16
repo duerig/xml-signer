@@ -6,20 +6,19 @@
 
   <link rel="shortcut icon" href="favicon.ico"/>
   <link rel="stylesheet" style="text/css"
-        href="lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" style="text/css"
-        href="lib/bootstrap/css/bootstrap-responsive.min.css">
+        href="lib/amelia.min.css">
   <script src="lib/jquery-1.8.2.min.js"></script>
   <script src="geni-auth.js"></script>
   <script>
-    var myId = "urn:publicid+deluxe.example.org+tool+deluxe-geni";
+    var myId = "urn:publicid:IDN+jonlab.testbed.emulab.net+user+duerig";
+    var myCert = "TOOL CERTIFICATE";
     function initialize()
     {
     $('#need-credential').show();
     $('#have-credential').hide();
     $('#authorize').click(function (event) {
       event.preventDefault();
-      genilib.authorize(myId, complete);
+      genilib.authorize(myId, myCert, complete);
       return false;
     });
     }

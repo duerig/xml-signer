@@ -1,6 +1,6 @@
 /*global require: true */
 
-require(['jquery', 'text!example.pem'],
+require(['jquery', 'text!cred/user.pem'],
 function ($, cert) {
   'use strict';
 
