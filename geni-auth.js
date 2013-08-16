@@ -1,7 +1,6 @@
 
 var genilib = {};
-genilib.trustedHost = 'http://localhost:8080';
-//genilib.trustedHost = 'https://www.emulab.net';
+genilib.trustedHost = '*';
 
 genilib.authorize = function(id, cert, callback)
 {
