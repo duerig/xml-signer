@@ -17,14 +17,9 @@ key bundle in PEM format, and the ability to host the source files on
 a webhost. For testing, you need not host them via SSL.
 
 Upload all of the files in the repository to your chosen
-destination. You may need to tweak geni-auth.js. The 'trustedHost'
-variable at the top is intended to point to the final trusted hostname
-for added security. But for testing, you will need to point it at the
-hostname and port of your test server.
-
-Once you have the files hosted, you can visit index.html by itself to
-simply load and clear your certificate. Or you can visit tool.html to
-try out the example tool and get a signed credential.
+destination. Once you have the files hosted, you can visit index.html
+by itself to simply load and clear your certificate. Or you can visit
+tool.html to try out the example tool and get a signed credential.
 
 ## Tool API ##
 
