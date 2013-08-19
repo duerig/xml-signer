@@ -1,12 +1,14 @@
 
 var genilib = {};
-genilib.trustedHost = '*';
+genilib.trustedHost = 'http://localhost:8080';
 
 genilib.authorize = function(id, cert, callback)
 {
   var wrapper = {};
 
-  wrapper.other = window.open('index.html?id=' + encodeURIComponent(id), 'GENI Tool Authorization',
+  wrapper.other = window.open(genilib.trustedHost + 'index.html?id=' +
+                              encodeURIComponent(id),
+                              'GENI Tool Authorization',
                               'height=400,width=800');
 
   wrapper.listener = function (event) {
