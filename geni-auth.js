@@ -1,12 +1,14 @@
 
 var genilib = {};
 genilib.trustedHost = 'http://localhost:8080';
+genilib.trustedPath = '/xml-signer/index.html';
 
 genilib.authorize = function(id, cert, callback)
 {
   var wrapper = {};
 
-  wrapper.other = window.open(genilib.trustedHost + 'index.html?id=' +
+  wrapper.other = window.open(genilib.trustedHost + genilib.trustedPath +
+                              '?id=' +
                               encodeURIComponent(id),
                               'GENI Tool Authorization',
                               'height=400,width=800');
@@ -27,7 +29,7 @@ genilib.authorize = function(id, cert, callback)
              event.data.id && event.data.id === id && event.data.credential)
     {
       window.removeEventListener('message', wrapper.listener, false);
-      wrapper.other.removeEventListener('close', wrapper.close, false);
+//      wrapper.other.removeEventListener('close', wrapper.close, false);
 
       data = {
         id: event.data.id,
@@ -41,11 +43,11 @@ genilib.authorize = function(id, cert, callback)
 
   wrapper.close = function (event) {
     window.removeEventListener('message', wrapper.message, false);
-    wrapper.other.removeEventListener('close', wrapper.close, false);
+//    wrapper.other.removeEventListener('close', wrapper.close, false);
   };
 
   window.addEventListener('message', wrapper.listener, false);
-  wrapper.other.addEventListener('close', wrapper.close, false);
+//  wrapper.other.addEventListener('close', wrapper.close, false);
 };
 
 genilib.sendCertificate = function (cert)
