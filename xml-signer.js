@@ -63,6 +63,7 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageToolCert(event)
   {
+    console.log('Got Tool Cert');
     if (event && event.data.certificate)
     {
       speakerCert = event.data.certificate;
@@ -74,6 +75,7 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
     if ((toolId && speakerCert)
         || (! toolId && ! speakerCert))
     {
+      console.log('Adding Tool Cert');
       if (cert)
       {
         parseCertificate(cert);
@@ -264,10 +266,8 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageCert(event)
   {
-    console.log('Got Cert');
     if (event.source === certWindow && event.data && event.data.certificate)
     {
-      console.log('Adding Cert');
       addCert(event.data.certificate);
     }
   }
