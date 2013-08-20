@@ -22,6 +22,7 @@ genilib.authorize = function(id, cert, callback)
       data = {
         certificate: cert
       };
+      console.log('Sending cert to ' + genilib.trustedHost);
       wrapper.other.postMessage(data, genilib.trustedHost);
     }
     else if (event.source === wrapper.other &&
@@ -35,6 +36,7 @@ genilib.authorize = function(id, cert, callback)
         id: event.data.id,
         ack: true
       };
+      console.log('Sending ack to ' + genilib.trustedHost);
       wrapper.other.postMessage(data, genilib.trustedHost);
 
       callback(event.data.credential);

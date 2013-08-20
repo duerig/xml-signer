@@ -264,8 +264,10 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageCert(event)
   {
+    console.log('Got Cert');
     if (event.source === certWindow && event.data && event.data.certificate)
     {
+      console.log('Adding Cert');
       addCert(event.data.certificate);
     }
   }
