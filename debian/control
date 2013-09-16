@@ -2,8 +2,8 @@ Source: xml-signer
 Section: contrib/misc
 Priority: extra
 Maintainer: Tom Mitchell <tmitchel@bbn.com>
-Build-Depends: debhelper (>= 8.0.0)
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 7.0.0)
+Standards-Version: 3.8.4
 Homepage: https://github.com/duerig/xml-signer
 Vcs-Git: https://github.com/duerig/xml-signer.git
 Vcs-Browser: https://github.com/duerig/xml-signer
