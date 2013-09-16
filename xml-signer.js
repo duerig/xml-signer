@@ -63,6 +63,7 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageToolCert(event)
   {
+    console.log('Got Tool Cert');
     if (event && event.data.certificate)
     {
       speakerCert = event.data.certificate;
@@ -74,6 +75,7 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
     if ((toolId && speakerCert)
         || (! toolId && ! speakerCert))
     {
+      console.log('Adding Tool Cert');
       if (cert)
       {
         parseCertificate(cert);
