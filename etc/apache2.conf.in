@@ -1,0 +1,5 @@
+Alias /xml-signer @pkgdatadir@/www
+<Directory @pkgdatadir@/www>
+  Order allow,deny
+  Allow from all
+</Directory>

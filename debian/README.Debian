@@ -1,0 +1,13 @@
+xml-signer for Debian
+---------------------
+
+The xml-signer software has to be made available via a web server. If
+your web server is apache you can include the default configuration
+included in the package or you can configure it manually.
+
+To include the default configuration in your apache server, add the
+following line within the appropriate VirtualHost declaration:
+
+   # Add xml-signer
+   Include /usr/share/xml-signer/etc/apache2.conf
+
