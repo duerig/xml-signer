@@ -1,5 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Contact: Jon Duerig <jon.d@example.com>
+Upstream-Contact: Jon Duerig <duerig@jonathonduerig.com>
 Source: https://github.com/duerig/xml-signer
 
 Files: *
@@ -10,11 +10,6 @@ License: MIT
 Files: require-jquery.js text.js
 Copyright: 2010-2012, The Dojo Foundation All Rights Reserved.
 License: MIT
-
-Files: debian/*
-Copyright: 2013 Raytheon BBN Technologies
-Comment: Tom Mitchell <tmitchel@bbn.com>
-License: GENI Public License
 
 Files: lib/bootstrap/* lib/amelia.min.css lib/cyborg.min.css
 Copyright: 2013 Twitter, Inc.
