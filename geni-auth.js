@@ -1,7 +1,7 @@
 
 var genilib = {};
-genilib.trustedHost = 'http://localhost:8080';
-genilib.trustedPath = '/xml-signer/index.html';
+genilib.trustedHost = 'https://www.emulab.net';
+genilib.trustedPath = '/protogeni/speaks-for/index.html';
 
 genilib.authorize = function(id, cert, callback)
 {
