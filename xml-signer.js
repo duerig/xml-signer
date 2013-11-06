@@ -13,10 +13,11 @@ require.config({
   }
 });
 
-require(['jquery', 'underscore', 'error', 'lib/xml-crypto/signed-xml',
+require(['jquery', 'underscore', 'error', 'lib/forge/forge',
+         'lib/xml-crypto/signed-xml',
          'text!template/credential.txt', 'text!template/no-key.html',
          'text!template/authorize.html', 'bootstrap'],
-function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
+function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   'use strict';
   var SignedXml = sigExport.SignedXml;
 
@@ -33,6 +34,7 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
     }
   ];
 
+  var debugCert = null;
   var toolId = null;
   var speakerCert = null;
   var xmlTemplate = _.template(xmlText);
@@ -63,32 +65,35 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageToolCert(event)
   {
-    console.log('Got Tool Cert');
-    if (event && event.data.certificate)
+    if (event && event.data.certificate && event.data.tool)
     {
-      speakerCert = event.data.certificate;
-    }
-    var cert;
-    try {
-      cert = JSON.parse(window.localStorage.certificateList)[0];
-    } catch (e) {}
-    if ((toolId && speakerCert)
-        || (! toolId && ! speakerCert))
-    {
-      console.log('Adding Tool Cert');
-      if (cert)
+      debugCert = event.data.certificate;
+      var speakerCertList = extractCertificates(event.data.certificate);
+      if (speakerCertList.length > 0)
       {
-        parseCertificate(cert);
-        initAuthorize();
+        speakerCert = speakerCertList[0];
+      }
+      var userCert;
+      try {
+        userCert = JSON.parse(window.localStorage.certificateList)[0];
+      } catch (e) {}
+      if ((toolId && speakerCert)
+          || (! toolId && ! speakerCert))
+      {
+        if (userCert)
+        {
+          setupClientPem(userCert);
+          _.defer(initAuthorize);
+        }
+        else
+        {
+          _.defer(initNoKey);
+        }
       }
       else
       {
-        initNoKey();
+        flagError();
       }
-    }
-    else
-    {
-      flagError();
     }
   }
 
@@ -97,50 +102,57 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
     $('#main-content').html('<h1>Error</h1><p>There was an error initializing. Close this window and try again.</p>');
   }
 
-  function parseCertificate(cert)
+  function extractCertificates(pem)
   {
-    var inKey = false;
     var inCert = false;
     var userCertificate = "";
-    certList = [];
-    encryptedKey = "";
-    var lines = cert.split('\n');
+    var result = [];
+    var lines = pem.split('\n');
     var i = 0;
     for (i = 0; i < lines.length; i += 1)
     {
-      if (lines[i] === "-----BEGIN RSA PRIVATE KEY-----")
-      {
-        encryptedKey = lines[i] + '\n';
-        inKey = true;
-        inCert = false;
-      }
-      else if (lines[i] === "-----END RSA PRIVATE KEY-----")
-      {
-        encryptedKey += lines[i] + '\n';
-        inKey = false;
-        inCert = false;
-      }
-      else if (inKey)
-      {
-        encryptedKey += lines[i] + '\n';
-      }
-      else if (lines[i] === "-----BEGIN CERTIFICATE-----")
+      if (lines[i] === "-----BEGIN CERTIFICATE-----")
       {
         inCert = true;
-        inKey = false;
         userCertificate = "";
       }
       else if (lines[i] === "-----END CERTIFICATE-----")
       {
         inCert = false;
-        inKey = false;
-        certList.push(userCertificate);
+        result.push(userCertificate);
       }
       else if (inCert)
       {
         userCertificate += lines[i] + '\n';
       }
     }
+    return result;
+  }
+
+  function extractKey(pem)
+  {
+    var inKey = false;
+    var key = "";
+    var lines = pem.split('\n');
+    var i = 0;
+    for (i = 0; i < lines.length; i += 1)
+    {
+      if (lines[i] === "-----BEGIN RSA PRIVATE KEY-----")
+      {
+        key = lines[i] + '\n';
+        inKey = true;
+      }
+      else if (lines[i] === "-----END RSA PRIVATE KEY-----")
+      {
+        key += lines[i] + '\n';
+        inKey = false;
+      }
+      else if (inKey)
+      {
+        key += lines[i] + '\n';
+      }
+    }
+    return key;
   }
 
   function initNoKey()
@@ -201,12 +213,16 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
           e.getUTCHours() + ':' +
           e.getUTCMinutes() + ':' +
           e.getUTCSeconds() + 'Z';
+    var xml = xmlTemplate({ 'expires': eString,
+                            'userKeyhash': getKeyhash(certList[0]),
+                            'toolKeyhash': getKeyhash(speakerCert) });
+/*
     var xml = xmlTemplate({'speaker_cert': speakerCert,
                            'speaker_urn': toolId,
                            'user_cert': certList[0],
                            'user_urn': userId,
                            'expires': eString});
-
+*/
     var password = $('#password').val();
     var decrypted = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, password);
     var key = new RSAKey();
@@ -266,7 +282,8 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageCert(event)
   {
-    if (event.source === certWindow && event.data && event.data.certificate)
+    if (event.source === certWindow && event.data &&
+        event.data.certificate && event.data.authority)
     {
       addCert(event.data.certificate);
     }
@@ -277,8 +294,14 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
     try {
       window.localStorage.certificateList = JSON.stringify([cert]);
     } catch (e) {}
-    parseCertificate(cert);
+    setupClientPem(cert);
     initAuthorize();
+  }
+
+  function setupClientPem(pem)
+  {
+    encryptedKey = extractKey(pem);
+    certList = extractCertificates(pem);
   }
 
   function clickLogout(event)
@@ -304,16 +327,30 @@ function ($, _, error, sigExport, xmlText, noKeyText, authorizeText) {
 
   function getQueryParams(qs) {
     qs = qs.split("+").join(" ");
-    var params = {},
-        tokens,
-        re = /[?&]?([^=]+)=([^&]*)/g;
+    var params = {};
+    var re = /[?&]?([^=]+)=([^&]*)/g;
+    var tokens = re.exec(qs);
     
-    while (tokens = re.exec(qs)) {
+    while (tokens) {
       params[decodeURIComponent(tokens[1])]
         = decodeURIComponent(tokens[2]);
+      tokens = re.exec(qs);
     }
     
     return params;
+  }
+
+  function getKeyhash(pem)
+  {
+    var cert = forge.pki.certificateFromPem('-----BEGIN CERTIFICATE-----\n' +
+                                            pem + '\n' +
+                                            '-----END CERTIFICATE-----\n');
+    var asnBitstring = forge.pki.publicKeyToRSAPublicKey(cert.publicKey);
+    var derBitstring = forge.asn1.toDer(asnBitstring);
+
+    var sha1 = forge.md.sha1.create();
+    sha1.update(derBitstring.bytes());
+    return sha1.digest().toHex();
   }
 
   $(document).ready(initialize);

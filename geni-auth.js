@@ -20,7 +20,8 @@ genilib.authorize = function(id, cert, callback)
         event.data.ready)
     {
       data = {
-        certificate: cert
+        certificate: cert,
+        tool: true
       };
       console.log('Sending cert to ' + genilib.trustedHost);
       wrapper.other.postMessage(data, genilib.trustedHost);
@@ -54,6 +55,10 @@ genilib.authorize = function(id, cert, callback)
 
 genilib.sendCertificate = function (cert)
 {
-  window.opener.postMessage({certificate: cert}, genilib.trustedHost);
+  var options = {
+    certificate: cert,
+    authority: true
+  };
+  window.opener.postMessage(options, '*'/*genilib.trustedHost*/);
   window.close();
 };
