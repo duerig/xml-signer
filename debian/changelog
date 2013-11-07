@@ -1,3 +1,10 @@
+xml-signer (0.2) unstable; urgency=low
+
+  * Generate ABAC-style credential
+  * Initial forge integration
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Mon, 07 Nov 2013 18:25:00 +0000
+
 xml-signer (0.1) unstable; urgency=low
 
   * Initial release
