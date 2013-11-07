@@ -55,6 +55,45 @@ nobase_dist_wwwdata_DATA = \
 	lib/bootstrap/js/bootstrap.js \
 	lib/bootstrap/js/bootstrap.min.js \
 	lib/cyborg.min.css \
+	lib/forge/aes.js \
+	lib/forge/aesCipherSuites.js \
+	lib/forge/asn1.js \
+	lib/forge/debug.js \
+	lib/forge/des.js \
+	lib/forge/forge.js \
+	lib/forge/form.js \
+	lib/forge/hmac.js \
+	lib/forge/http.js \
+	lib/forge/jsbn.js \
+	lib/forge/log.js \
+	lib/forge/md.js \
+	lib/forge/md5.js \
+	lib/forge/mgf.js \
+	lib/forge/mgf1.js \
+	lib/forge/oids.js \
+	lib/forge/pbe.js \
+	lib/forge/pbkdf2.js \
+	lib/forge/pem.js \
+	lib/forge/pkcs1.js \
+	lib/forge/pkcs12.js \
+	lib/forge/pkcs7.js \
+	lib/forge/pkcs7asn1.js \
+	lib/forge/pki.js \
+	lib/forge/prime.worker.js \
+	lib/forge/prng.js \
+	lib/forge/pss.js \
+	lib/forge/random.js \
+	lib/forge/rc2.js \
+	lib/forge/rsa.js \
+	lib/forge/sha1.js \
+	lib/forge/sha256.js \
+	lib/forge/socket.js \
+	lib/forge/task.js \
+	lib/forge/tls.js \
+	lib/forge/tlssocket.js \
+	lib/forge/util.js \
+	lib/forge/x509.js \
+	lib/forge/xhr.js \
 	lib/jquery-1.8.2.min.js \
 	lib/jsrsasign/ChangeLog.txt \
 	lib/jsrsasign/api/files.html \
