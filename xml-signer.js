@@ -207,12 +207,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     }
     var e = new Date();
     e.setTime(e.getTime() + timeOffset);
-    var eString = e.getUTCFullYear() + '-' +
-          (e.getUTCMonth()+1) + '-' +
-          e.getUTCDate() + 'T' +
-          e.getUTCHours() + ':' +
-          e.getUTCMinutes() + ':' +
-          e.getUTCSeconds() + 'Z';
+    var eString = e.toISOString();
     var xml = xmlTemplate({ 'expires': eString,
                             'userKeyhash': getKeyhash(certList[0]),
                             'toolKeyhash': getKeyhash(speakerCert) });
