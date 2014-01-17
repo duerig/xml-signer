@@ -1,3 +1,9 @@
+xml-signer (0.3) unstable; urgency=low
+
+  * Use toISOString() for credential expires field
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Thu, 16 Jan 2014 22:05:00 +0000
+
 xml-signer (0.2) unstable; urgency=low
 
   * Generate ABAC-style credential
