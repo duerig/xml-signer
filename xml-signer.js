@@ -335,11 +335,17 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     return params;
   }
 
-  function getKeyhash(pem)
+  function parsePemCert(pem)
   {
     var cert = forge.pki.certificateFromPem('-----BEGIN CERTIFICATE-----\n' +
                                             pem + '\n' +
                                             '-----END CERTIFICATE-----\n');
+    return cert;
+  }
+
+  function getKeyhash(pem)
+  {
+    var cert = parsePemCert(pem);
     var asnBitstring = forge.pki.publicKeyToRSAPublicKey(cert.publicKey);
     var derBitstring = forge.asn1.toDer(asnBitstring);
 
