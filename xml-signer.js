@@ -196,6 +196,72 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     window.addEventListener('message', messageAck);
   }
 
+  /**
+   * Populate the KeyInfo block in the signature. Add a KeyValue block
+   * with the signing public key info (modulus and exponent). Put the
+   * full certificate chain in the X509Data block so that it can be
+   * verified.
+   *
+   * @param chain an one or more certificates in an array where the
+   *              first is the signing certificate.
+   */
+  function GENIKeyInfo(chain)
+  {
+    this.chain = chain;
+
+    /**
+     * Note: This is a private function from forge.rsa
+     * Converts a positive BigInteger into 2's-complement big-endian bytes.
+     *
+     * @param b the big integer to convert.
+     *
+     * @return the bytes.
+     */
+    this.bnToBytes = function(b) {
+      // prepend 0x00 if first byte >= 0x80
+      var hex = b.toString(16);
+      if(hex[0] >= '8') {
+        hex = '00' + hex;
+      }
+      return forge.util.hexToBytes(hex);
+    }
+
+    this.keyValue = function(pemcert) {
+      var cert = parsePemCert(this.chain[0]);
+      var modulus = cert.publicKey.n;
+      var modulus64 = forge.util.encode64(this.bnToBytes(modulus), 64);
+      /* forge puts CR and NL in, we just want NL. */
+      modulus64 = modulus64.replace(/\r\n/g,"\n");
+      var exponent = cert.publicKey.e;
+      var exponent64 = forge.util.encode64(this.bnToBytes(exponent), 64);
+      var res = "\n<KeyValue>\n<RSAKeyValue>\n<Modulus>";
+      res += modulus64;
+      res += "\n</Modulus>\n<Exponent>";
+      res += exponent64;
+      res += "</Exponent>\n</RSAKeyValue></KeyValue>";
+      return res;
+    }
+
+    this.getKeyInfo = function(key) {
+      var res = "";
+      if (this.chain) {
+        res += this.keyValue(this.chain[0]);
+        res += "\n<X509Data>";
+        for (var i = 0; i < this.chain.length; i++) {
+          res += "\n<X509Certificate>";
+          res += this.chain[i];
+          res += "</X509Certificate>";
+        }
+        res += "\n</X509Data>";
+      }
+      return res
+    };
+
+    this.getKey = function(keyInfo) {
+      return "";
+    };
+  }
+
   function clickSign(event)
   {
     event.preventDefault();
@@ -228,7 +294,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     sig.signatureNode = "//*[local-name(.)='signatures']";
     if (certList.length > 0)
     {
-      sig.keyInfoProvider = new sigExport.StoredKeyInfo(certList[0]);
+      sig.keyInfoProvider = new GENIKeyInfo(certList);
     }
     sig.computeSignature(xml);
     var data = {
