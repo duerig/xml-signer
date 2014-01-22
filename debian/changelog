@@ -1,3 +1,9 @@
+xml-signer (0.4) unstable; urgency=low
+
+  * Add KeyValue and the full certificate chain to signed credentials.
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Thu, 22 Jan 2014 17:42:00 +0000
+
 xml-signer (0.3) unstable; urgency=low
 
   * Use toISOString() for credential expires field
