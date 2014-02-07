@@ -62,3 +62,13 @@ genilib.sendCertificate = function (cert)
   window.opener.postMessage(options, '*'/*genilib.trustedHost*/);
   window.close();
 };
+
+genilib.sendCredential = function (cred)
+{
+  var options = {
+    sfcred: cred,
+    authority: true
+  };
+  window.opener.postMessage(options, '*'/*genilib.trustedHost*/);
+  window.close();
+};
