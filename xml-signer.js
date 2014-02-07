@@ -315,6 +315,8 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     var url = $('#sa-choice').val();
     if (url !== '')
     {
+      var encodedToolId = encodeURIComponent(toolId);
+      url += '?toolid=' + encodedToolId;
       certWindow = window.open(url, 'Slice Authority Credential',
                                'height=400,width=600');
     }
@@ -343,10 +345,16 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageCert(event)
   {
-    if (event.source === certWindow && event.data &&
-        event.data.certificate && event.data.authority)
+    if (event.source === certWindow && event.data && event.data.authority)
     {
-      addCert(event.data.certificate);
+      if (event.data.certificate)
+      {
+        addCert(event.data.certificate);
+      }
+      else if (event.data.sfcred)
+      {
+        reflectCred(event.data.sfcred);
+      }
     }
   }
 
@@ -363,6 +371,20 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   {
     encryptedKey = extractKey(pem);
     certList = extractCertificates(pem);
+  }
+
+  /*
+   * Reflect a speaks-for credential back to the original tool
+   */
+  function reflectCred(cred)
+  {
+    var data = {
+      id: toolId,
+      credential: cred
+    };
+    window.opener.postMessage(data, '*');
+    window.removeEventListener('message', messageCert);
+    window.addEventListener('message', messageAck);
   }
 
   function clickLogout(event)
