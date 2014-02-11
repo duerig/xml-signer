@@ -22,7 +22,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var SignedXml = sigExport.SignedXml;
 
   var singleDay = 1000*60*60*24;
-
+/*
   var saList = [
     {
       name: 'Utah ProtoGENI',
@@ -33,6 +33,26 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       url: 'http://myboss.jonlab.testbed.emulab.net/getsslcertjs.php3'
     }
   ];
+*/
+
+  var saList = [];
+
+  function parseSaList(str)
+  {
+    saList = [];
+    var lines = str.split('\n');
+    _.each(lines, function (line) {
+      var fields = line.split(' ');
+      if (fields.length > 1)
+      {
+	var name = fields[0].split('+')[1];
+	var urlPaths = fields[1].split('/');
+	var url = urlPaths[0] + '//' + urlPaths[2].split(':')[0] + '/getsslcertjs.php3';
+	saList.push({ name: name,
+		      url: url });
+      }
+    });
+  }
 
   var debugCert = null;
   var toolId = null;
@@ -47,20 +67,27 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function initialize()
   {
-    var params = getQueryParams(window.location.search);
-    toolId = params.id;
-    if (toolId)
-    {
-      window.addEventListener('message', messageToolCert, false);
-      var data = {
-        ready: true
-      };
-      window.opener.postMessage(data, '*');
-    }
-    else
-    {
-      messageToolCert(null);
-    }
+    var promise = $.get('https://www.emulab.net/protogeni/boot/salist.txt');
+    promise.then(function (response) {
+       parseSaList(response);
+      var params = getQueryParams(window.location.search);
+      toolId = params.id;
+      if (toolId)
+      {
+	window.addEventListener('message', messageToolCert, false);
+	var data = {
+          ready: true
+	};
+	window.opener.postMessage(data, '*');
+      }
+      else
+      {
+	messageToolCert(null);
+      }
+    }, function (error) {
+      console.log('Error fetching SA List: ', error);
+      flagError();
+    });
   }
 
   function messageToolCert(event)
