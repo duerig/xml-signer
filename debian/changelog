@@ -1,3 +1,11 @@
+xml-signer (0.5) unstable; urgency=low
+
+  * Allow an MA to send a credential back to the originating tool
+  * Use an external list of member authorities
+  * Allow a tool to specify an optional default MA
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Thu, 12 Feb 2014 17:11:00 +0000
+
 xml-signer (0.4) unstable; urgency=low
 
   * Add KeyValue and the full certificate chain to signed credentials.

@@ -80,6 +80,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var certList = [];
   var certWindow;
   var userId = 'urn:publicid:IDN+jonlab.testbed.emulab.net+user+jld';
+  var defaultMA = { url: null, name: null};
 
   function initialize()
   {
@@ -108,6 +109,12 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageToolCert(event)
   {
+    /* If the tool requested an MA by URL, extract it. */
+    if (event && event.data.ma)
+    {
+      defaultMA.url = event.data.ma.url;
+      defaultMA.name = event.data.ma.name;
+    }
     if (event && event.data.certificate && event.data.tool)
     {
       debugCert = event.data.certificate;
@@ -208,10 +215,22 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     window.addEventListener('message', messageCert);
     var choice = $('#sa-choice');
     var i = 0;
+    var defaultFound = false;
     for (i = 0; i < saList.length; i += 1)
     {
-      choice.append('<option value="' + saList[i].url + '">' + saList[i].name +
+      var attrs = 'value="' + saList[i].url + '"';
+      if (defaultMA.url && defaultMA.url == saList[i].url)
+      {
+        defaultFound = true;
+        attrs += ' selected="selected"'
+      }
+      choice.append('<option ' + attrs + '>' + saList[i].name +
                     '</option>');
+    }
+    if (! defaultFound && defaultMA.url && defaultMA.name)
+    {
+      choice.append('<option value="' + defaultMA.url + '" selected="selected">'
+                    + defaultMA.name + '</option>');
     }
   }
 
@@ -358,6 +377,8 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     var url = $('#sa-choice').val();
     if (url !== '')
     {
+      var encodedToolId = encodeURIComponent(toolId);
+      url += '?toolid=' + encodedToolId;
       certWindow = window.open(url, 'Slice Authority Credential',
                                'height=400,width=600');
     }
@@ -386,10 +407,16 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageCert(event)
   {
-    if (event.source === certWindow && event.data &&
-        event.data.certificate && event.data.authority)
+    if (event.source === certWindow && event.data && event.data.authority)
     {
-      addCert(event.data.certificate);
+      if (event.data.certificate)
+      {
+        addCert(event.data.certificate);
+      }
+      else if (event.data.sfcred)
+      {
+        reflectCred(event.data.sfcred);
+      }
     }
   }
 
@@ -406,6 +433,20 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   {
     encryptedKey = extractKey(pem);
     certList = extractCertificates(pem);
+  }
+
+  /*
+   * Reflect a speaks-for credential back to the original tool
+   */
+  function reflectCred(cred)
+  {
+    var data = {
+      id: toolId,
+      credential: cred
+    };
+    window.opener.postMessage(data, '*');
+    window.removeEventListener('message', messageCert);
+    window.addEventListener('message', messageAck);
   }
 
   function clickLogout(event)
