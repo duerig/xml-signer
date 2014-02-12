@@ -46,10 +46,26 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       if (fields.length > 1)
       {
 	var name = fields[0].split('+')[1];
-	var urlPaths = fields[1].split('/');
-	var url = urlPaths[0] + '//' + urlPaths[2].split(':')[0] + '/getsslcertjs.php3';
-	saList.push({ name: name,
-		      url: url });
+	var url;
+	if (fields.length === 2)
+	{
+	  var urlPaths = fields[1].split('/');
+	  url = urlPaths[0] + '//' + urlPaths[2].split(':')[0] +
+	    '/getsslcertjs.php3';
+	}
+	else if (fields.length === 3)
+	{
+	  url = fields[2];
+	}
+	if (url)
+	{
+	  saList.push({ name: name,
+			url: url });
+	}
+	else
+	{
+	  console.log('Invalid URL for ', fields[0]);
+	}
       }
     });
   }
