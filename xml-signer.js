@@ -22,7 +22,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var SignedXml = sigExport.SignedXml;
 
   var singleDay = 1000*60*60*24;
-
+/*
   var saList = [
     {
       name: 'Utah ProtoGENI',
@@ -33,6 +33,42 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       url: 'http://myboss.jonlab.testbed.emulab.net/getsslcertjs.php3'
     }
   ];
+*/
+
+  var saList = [];
+
+  function parseSaList(str)
+  {
+    saList = [];
+    var lines = str.split('\n');
+    _.each(lines, function (line) {
+      var fields = line.split(' ');
+      if (fields.length > 1)
+      {
+	var name = fields[0].split('+')[1];
+	var url;
+	if (fields.length === 2)
+	{
+	  var urlPaths = fields[1].split('/');
+	  url = urlPaths[0] + '//' + urlPaths[2].split(':')[0] +
+	    '/getsslcertjs.php3';
+	}
+	else if (fields.length === 3)
+	{
+	  url = fields[2];
+	}
+	if (url)
+	{
+	  saList.push({ name: name,
+			url: url });
+	}
+	else
+	{
+	  console.log('Invalid URL for ', fields[0]);
+	}
+      }
+    });
+  }
 
   var debugCert = null;
   var toolId = null;
@@ -44,27 +80,41 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var certList = [];
   var certWindow;
   var userId = 'urn:publicid:IDN+jonlab.testbed.emulab.net+user+jld';
+  var defaultMA = { url: null, name: null};
 
   function initialize()
   {
-    var params = getQueryParams(window.location.search);
-    toolId = params.id;
-    if (toolId)
-    {
-      window.addEventListener('message', messageToolCert, false);
-      var data = {
-        ready: true
-      };
-      window.opener.postMessage(data, '*');
-    }
-    else
-    {
-      messageToolCert(null);
-    }
+    var promise = $.get('https://www.emulab.net/protogeni/boot/salist.txt');
+    promise.then(function (response) {
+       parseSaList(response);
+      var params = getQueryParams(window.location.search);
+      toolId = params.id;
+      if (toolId)
+      {
+	window.addEventListener('message', messageToolCert, false);
+	var data = {
+          ready: true
+	};
+	window.opener.postMessage(data, '*');
+      }
+      else
+      {
+	messageToolCert(null);
+      }
+    }, function (error) {
+      console.log('Error fetching SA List: ', error);
+      flagError();
+    });
   }
 
   function messageToolCert(event)
   {
+    /* If the tool requested an MA by URL, extract it. */
+    if (event && event.data.ma)
+    {
+      defaultMA.url = event.data.ma.url;
+      defaultMA.name = event.data.ma.name;
+    }
     if (event && event.data.certificate && event.data.tool)
     {
       debugCert = event.data.certificate;
@@ -165,10 +215,22 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     window.addEventListener('message', messageCert);
     var choice = $('#sa-choice');
     var i = 0;
+    var defaultFound = false;
     for (i = 0; i < saList.length; i += 1)
     {
-      choice.append('<option value="' + saList[i].url + '">' + saList[i].name +
+      var attrs = 'value="' + saList[i].url + '"';
+      if (defaultMA.url && defaultMA.url == saList[i].url)
+      {
+        defaultFound = true;
+        attrs += ' selected="selected"'
+      }
+      choice.append('<option ' + attrs + '>' + saList[i].name +
                     '</option>');
+    }
+    if (! defaultFound && defaultMA.url && defaultMA.name)
+    {
+      choice.append('<option value="' + defaultMA.url + '" selected="selected">'
+                    + defaultMA.name + '</option>');
     }
   }
 
