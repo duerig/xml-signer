@@ -64,6 +64,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var certList = [];
   var certWindow;
   var userId = 'urn:publicid:IDN+jonlab.testbed.emulab.net+user+jld';
+  var defaultMA = { url: null, name: null};
 
   function initialize()
   {
@@ -92,6 +93,12 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageToolCert(event)
   {
+    /* If the tool requested an MA by URL, extract it. */
+    if (event && event.data.ma)
+    {
+      defaultMA.url = event.data.ma.url;
+      defaultMA.name = event.data.ma.name;
+    }
     if (event && event.data.certificate && event.data.tool)
     {
       debugCert = event.data.certificate;
@@ -192,10 +199,22 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     window.addEventListener('message', messageCert);
     var choice = $('#sa-choice');
     var i = 0;
+    var defaultFound = false;
     for (i = 0; i < saList.length; i += 1)
     {
-      choice.append('<option value="' + saList[i].url + '">' + saList[i].name +
+      var attrs = 'value="' + saList[i].url + '"';
+      if (defaultMA.url && defaultMA.url == saList[i].url)
+      {
+        defaultFound = true;
+        attrs += ' selected="selected"'
+      }
+      choice.append('<option ' + attrs + '>' + saList[i].name +
                     '</option>');
+    }
+    if (! defaultFound && defaultMA.url && defaultMA.name)
+    {
+      choice.append('<option value="' + defaultMA.url + '" selected="selected">'
+                    + defaultMA.name + '</option>');
     }
   }
 

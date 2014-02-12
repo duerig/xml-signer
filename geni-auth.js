@@ -3,7 +3,7 @@ var genilib = {};
 genilib.trustedHost = 'https://www.emulab.net';
 genilib.trustedPath = '/protogeni/speaks-for/index.html';
 
-genilib.authorize = function(id, cert, callback)
+genilib.authorize = function(id, cert, callback, defaultMA)
 {
   var wrapper = {};
 
@@ -23,6 +23,12 @@ genilib.authorize = function(id, cert, callback)
         certificate: cert,
         tool: true
       };
+      /* Include the default MA if specified. */
+      if (defaultMA && defaultMA.url && defaultMA.name) {
+          data.ma = {};
+          data.ma.url = defaultMA.url;
+          data.ma.name = defaultMA.name;
+      }
       console.log('Sending cert to ' + genilib.trustedHost);
       wrapper.other.postMessage(data, genilib.trustedHost);
     }
