@@ -331,9 +331,6 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     try
     {
       var decrypted = forge.pki.decryptRsaPrivateKey(encryptedKey, password);
-//    var decrypted = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, password);
-//    var key = new RSAKey();
-//    key.readPrivateKeyFromASN1HexString(decrypted);
       var sig = new SignedXml();
       sig.addReference("//*[local-name(.)='credential']");
       sig.signingKey = decrypted;
