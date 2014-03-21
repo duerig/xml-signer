@@ -22,18 +22,6 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var SignedXml = sigExport.SignedXml;
 
   var singleDay = 1000*60*60*24;
-/*
-  var saList = [
-    {
-      name: 'Utah ProtoGENI',
-      url: 'https://www.emulab.net/getsslcertjs.php3'
-    },
-    {
-      name: 'Jonlab',
-      url: 'http://myboss.jonlab.testbed.emulab.net/getsslcertjs.php3'
-    }
-  ];
-*/
 
   var saList = [];
 
@@ -339,13 +327,6 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     var xml = xmlTemplate({ 'expires': eString,
                             'userKeyhash': getKeyhash(certList[0]),
                             'toolKeyhash': getKeyhash(speakerCert) });
-/*
-    var xml = xmlTemplate({'speaker_cert': speakerCert,
-                           'speaker_urn': toolId,
-                           'user_cert': certList[0],
-                           'user_urn': userId,
-                           'expires': eString});
-*/
     var password = $('#password').val();
     var decrypted = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, password);
     var key = new RSAKey();
