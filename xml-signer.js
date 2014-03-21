@@ -328,24 +328,32 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
                             'userKeyhash': getKeyhash(certList[0]),
                             'toolKeyhash': getKeyhash(speakerCert) });
     var password = $('#password').val();
-    var decrypted = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, password);
-    var key = new RSAKey();
-    key.readPrivateKeyFromASN1HexString(decrypted);
-    var sig = new SignedXml();
-    sig.addReference("//*[local-name(.)='credential']");
-    sig.signingKey = key;
-    sig.signatureNode = "//*[local-name(.)='signatures']";
-    if (certList.length > 0)
+    try
     {
-      sig.keyInfoProvider = new GENIKeyInfo(certList);
+      var decrypted = forge.pki.decryptRsaPrivateKey(encryptedKey, password);
+//    var decrypted = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, password);
+//    var key = new RSAKey();
+//    key.readPrivateKeyFromASN1HexString(decrypted);
+      var sig = new SignedXml();
+      sig.addReference("//*[local-name(.)='credential']");
+      sig.signingKey = decrypted;
+      sig.signatureNode = "//*[local-name(.)='signatures']";
+      if (certList.length > 0)
+      {
+	sig.keyInfoProvider = new GENIKeyInfo(certList);
+      }
+      sig.computeSignature(xml);
+      var data = {
+	id: toolId,
+	credential: sig.getSignedXml()
+      };
+      window.opener.postMessage(data, '*');
     }
-    sig.computeSignature(xml);
-    var data = {
-      id: toolId,
-      credential: sig.getSignedXml()
-    };
-    window.opener.postMessage(data, '*');
-    return false;
+    catch (e)
+    {
+      console.log('Error signing credential:', e);
+      error.show();
+    }
   }
 
   function clickGetCert(event)
