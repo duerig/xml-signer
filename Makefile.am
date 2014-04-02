@@ -25,9 +25,7 @@ etc/apache2.conf: $(srcdir)/etc/apache2.conf.in
 
 # Distribute these but do not install them
 EXTRA_DIST = \
-	etc/apache2.conf.in \
-	lib/jsrsasign/LICENSE.txt \
-	lib/jsrsasign/THIRDPARTY_LICENSE.txt
+	etc/apache2.conf.in
 
 CLEANFILES = etc/apache2.conf
 
