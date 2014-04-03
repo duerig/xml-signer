@@ -19,17 +19,7 @@ Files: lib/forge/*
 Copyright: 2011-2013 Digital Bazaar, Inc.
 License: BSD
 
-Files: lib/jsrsasign/*
-Copyright: 2010-2013 Kenji Urushima
-License: MIT
-
-Files: lib/jsrsasign/base64.js lib/jsrsasign/jsbn.js
-       lib/jsrsasign/jsbn2.js lib/jsrsasign/prng4.js lib/jsrsasign/rng.js
-       lib/jsrsasign/rsa.js lib/jsrsasign/rsa2.js 
-Copyright: 2003-2005  Tom Wu
-License: MIT
-
-Files: lib/xml-crypto/e*.js lib/xml-crypt/signed-xml.js lib/xml-crypt/utils.js
+Files: lib/xml-crypto/e*.js lib/xml-crypto/signed-xml.js lib/xml-crypto/utils.js
 Copyright: None Listed
 Comment: github repository by Yaron Naveh <yaronn01@gmail.com>
 License: public-domain
@@ -42,10 +32,6 @@ Files: lib/xmldom/*
 Copyright: None Listed
 Comment: github repository by jindw <jindw@xidea.org>
 License: public-domain
-
-Files: lib/aes.js lib/tripledes.js
-Copyright: 2009-2013 by Jeff Mott. All rights reserved.
-License: MIT
 
 Files: lib/jquery-1.8.2.min.js
 Copyright: 2013 jQuery Foundation and other contributors http://jquery.com/
