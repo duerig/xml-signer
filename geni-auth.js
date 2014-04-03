@@ -57,6 +57,10 @@ genilib.authorize = function(id, cert, callback, defaultMA)
 
   window.addEventListener('message', wrapper.listener, false);
 //  wrapper.other.addEventListener('close', wrapper.close, false);
+
+  // Return the other window so the caller can notice when it's gone
+  // or put up UI directing the user's attention to the other window
+  return wrapper.other;
 };
 
 genilib.sendCertificate = function (cert)
