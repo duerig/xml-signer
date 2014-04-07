@@ -1,3 +1,11 @@
+xml-signer (0.6) unstable; urgency=low
+
+  * Switch to forge for encryption and verification
+  * Return signer window to caller on genilib.authorize
+  * Wording and other UI tweaks
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Mon, 07 Apr 2014 18:31:00 +0000
+
 xml-signer (0.5) unstable; urgency=low
 
   * Allow an MA to send a credential back to the originating tool
