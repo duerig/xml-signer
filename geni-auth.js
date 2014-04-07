@@ -11,7 +11,7 @@ genilib.authorize = function(id, cert, callback, defaultMA)
                               '?id=' +
                               encodeURIComponent(id),
                               'GENI Tool Authorization',
-                              'height=400,width=800');
+                              'height=500,width=800');
 
   wrapper.listener = function (event) {
     var data;
