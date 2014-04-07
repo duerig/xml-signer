@@ -44,7 +44,7 @@ Parameters:
   XML GENI credential. There is no timeout and this method may never
   be called if the user closes the authorization window.
 
-Returns: Nothing
+Returns: The authorization window
 
 ## Member Authority API ##
 
