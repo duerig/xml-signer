@@ -41,6 +41,7 @@ nobase_dist_wwwdata_DATA = \
 	emulab.js \
 	error.js \
 	geni-auth.js \
+	index.html \
 	lib/amelia.min.css \
 	lib/bootstrap/css/bootstrap-responsive.css \
 	lib/bootstrap/css/bootstrap-responsive.min.css \
