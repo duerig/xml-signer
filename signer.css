@@ -1,0 +1,60 @@
+#main-content {
+	width: 770px;
+	margin: 0;
+}
+#main-content > .hero-unit {
+	width: 770px;
+	height: 500px;
+	padding: 10px;
+	margin: 0;
+	font-size: 17px;
+}
+
+#paste-input {
+	margin-left: 10px;
+	width: 550px;
+}
+
+#paste-button {
+	margin-top: 15px;
+}
+
+#sa-choice {
+	margin-left: 10px;
+	width: 570px;
+}
+
+#sa-button {
+	margin-top: 60px;
+}
+
+.tab-content {
+	overflow: visible;
+}
+
+
+.form-horizontal .control-label {
+	text-align: center;
+}
+
+#saPane, #manualPane {
+	margin-top: -20px;
+	padding: 15px 15px 1px;
+	background-color: white;
+}
+
+.form-group .col-offset-2 {
+	overflow: auto;
+}
+
+#logout {
+	margin-top: -55px;
+}
+
+#sign {
+	margin-top: 20px;
+}
+
+.tool-urn {
+	margin-top: 40px;
+}
