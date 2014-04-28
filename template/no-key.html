@@ -1,34 +1,44 @@
 <div class="hero-unit">
-  <h1>GENI Authorization Tool</h1>
+  <h2>GENI Authorization Tool</h2>
   <p>The GENI Authorization Tool allows you to authorize applications to speak on your behalf to allocate slices or slivers. Your GENI certificate and private key are stored in your web browser and your passphrase is never transmitted over the network.</p>
   <p>You can download your GENI certificate and private key from a GENI Member Authority or paste your GENI certificate and private key into the box below.</p>
-  <form id="sa-form" class="form-horizontal">
-    <div class="form-group">
-      <label class="control-label col-lg-2" for="sa-choice">Member Authority</label>
-      <div class="col-lg-4">
-        <select id="sa-choice" class="form-control">
-          <option value="">Choose your MA</option>
-        </select>
+  <div class="panel-body">
+    <ul class="nav nav-tabs tabNav">
+      <li class="active"><a href="#saPane" data-toggle="tab">Identity Provider</a></li>
+      <li><a href="#manualPane" data-toggle="tab">Certificate</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="saPane">
+        <form id="sa-form" class="form-horizontal">
+          <div class="form-group">
+            <label class="control-label col-lg-2" for="sa-choice">Member Authority</label>
+            <div class="col-lg-4">
+              <select id="sa-choice" class="form-control">
+                <option value="">Choose your MA</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-offset-2 col-lg-10">
+              <button id="sa-button" class="btn btn-default pull-right">Download Certificate</button>
+            </div>
+          </div>
+        </form>
       </div>
-    </div>
-    <div class="form-group">
-      <div class="col-offset-2 col-lg-10">
-        <button id="sa-button" class="btn btn-default">Download Certificate</button>
+      <div class="tab-pane" id="manualPane">
+        <form id="paste-form" class="form-horizontal">
+          <div class="form-group">
+            <label class="control-label col-lg-2" for="paste-input">Paste Certificate</label>
+            <div class="col-lg-10">
+              <textarea id="paste-input" class="form-control" rows="4" placeholder="Paste Certificate and Private Key Here..."></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-offset-2 col-lg-10">
+              <button id="paste-button" class="btn btn-default pull-right">Save Certificate</button>
+            </div>
+          </div>
+        </form>
       </div>
-    </div>
-  </form>
-  <h2>Or</h2>
-  <form id="paste-form" class="form-horizontal">
-    <div class="form-group">
-      <label class="control-label col-lg-2" for="paste-input">Paste Certificate</label>
-      <div class="col-lg-10">
-        <textarea id="paste-input" class="form-control" rows="10" placeholder="Paste Certificate and Private Key Here..."></textarea>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-offset-2 col-lg-10">
-        <button id="paste-button" class="btn btn-default">Save Certificate</button>
-      </div>
-    </div>
-  </form>
+  </div>
 </div>
