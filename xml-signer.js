@@ -111,10 +111,21 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       {
         speakerCert = speakerCertList[0];
       }
+//      var cannedCert = $('#preset-bundle');
       var userCert;
       try {
         userCert = JSON.parse(window.localStorage.certificateList)[0];
       } catch (e) {}
+      if (! userCert && event.data.userBundle)
+      {
+	userCert = event.data.userBundle;
+      }
+/*
+      if (! userCert && cannedCert.length > 0)
+      {
+	userCert = cannedCert[0].textContent;
+      }
+*/
       if ((toolId && speakerCert)
           || (! toolId && ! speakerCert))
       {
@@ -244,6 +255,15 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     $('#logout').click(clickLogout);
     window.removeEventListener('message', messageCert);
     window.addEventListener('message', messageAck);
+    if (! isEncrypted(encryptedKey))
+    {
+      $('#password-container').hide();
+    }
+    else
+    {
+      $('#password-container').show();
+    }
+    getCertFields(certList);
   }
 
   /**
@@ -316,7 +336,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   {
     event.preventDefault();
     var durationDays = parseInt($('#time').val(), 10);
-    var timeOffset = 30 * singleDay;
+    var timeOffset = 120 * singleDay;
     if (durationDays && durationDays > 0 && durationDays < 400)
     {
       timeOffset = durationDays * singleDay;
@@ -408,10 +428,13 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function addCert(cert)
   {
-    try {
-      window.localStorage.certificateList = JSON.stringify([cert]);
-    } catch (e) {}
     setupClientPem(cert);
+    if (isEncrypted(encryptedKey))
+    {
+      try {
+	window.localStorage.certificateList = JSON.stringify([cert]);
+      } catch (e) {}
+    }
     initAuthorize();
   }
 
@@ -488,6 +511,65 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     var sha1 = forge.md.sha1.create();
     sha1.update(derBitstring.bytes());
     return sha1.digest().toHex();
+  }
+
+  function isEncrypted(key)
+  {
+    var result = true;
+    try
+    {
+      var decrypted = forge.pki.decryptRsaPrivateKey(key, '');
+      // If there are no exceptions, this is an unencrypted key.
+      result = false;
+    }
+    catch (e) {}
+    return result;
+  }
+
+  function getCertFields (certificateList)
+  {
+//    _.each(certificateList, function (certificate) {
+      var cert = parsePemCert(certificateList[0]);
+      var found = false;
+      var urn;
+      var name;
+
+      var altField;
+      _.each(cert.extensions, function (field) {
+	if (field.name === 'subjectAltName')
+	{
+	  altField = field;
+	}
+      });
+      if (altField)
+      {
+	_.each(altField.altNames, function (item) {
+	  if (item.type === 6 && item.value.substr(0, 12) === 'urn:publicid')
+	  {
+	    urn = item.value;
+	  }
+	});
+      }
+      if (urn)
+      {
+	name = urn.split('+')[3];
+	found = true;
+      }
+
+      if (found)
+      {
+	var authorityUrn = 'urn:publicid:IDN+' + urn.split('+')[1] +
+	  '+authority+sa';
+
+	fillUserForm(name, authorityUrn);
+      }
+//    });
+  }
+
+  function fillUserForm(name, authority)
+  {
+    $('#userName').val(name);
+    $('#authorityName').val(authority.split('+')[1]);
   }
 
   $(document).ready(initialize);

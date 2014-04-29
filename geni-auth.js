@@ -3,7 +3,7 @@ var genilib = {};
 genilib.trustedHost = 'https://www.emulab.net';
 genilib.trustedPath = '/protogeni/speaks-for/index.html';
 
-genilib.authorize = function(id, cert, callback, defaultMA)
+genilib.authorize = function(id, cert, callback, defaultMA, userBundle)
 {
   var wrapper = {};
 
@@ -11,7 +11,7 @@ genilib.authorize = function(id, cert, callback, defaultMA)
                               '?id=' +
                               encodeURIComponent(id),
                               'GENI Tool Authorization',
-                              'height=500,width=800');
+                              'height=600,width=800');
 
   wrapper.listener = function (event) {
     var data;
@@ -23,6 +23,10 @@ genilib.authorize = function(id, cert, callback, defaultMA)
         certificate: cert,
         tool: true
       };
+      if (userBundle)
+      {
+	data.userBundle = userBundle;
+      }
       /* Include the default MA if specified. */
       if (defaultMA && defaultMA.url && defaultMA.name) {
           data.ma = {};
