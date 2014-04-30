@@ -1,0 +1,106 @@
+/*
+#main-content {
+	width: 770px;
+	margin: 0;
+}
+#main-content > .hero-unit {
+	width: 770px;
+	height: 500px;
+	padding: 10px;
+	margin: 0;
+	font-size: 17px;
+}
+*/
+#paste-input {
+    margin-top: 10px;
+	width: 100%;
+}
+
+#paste-button {
+	margin-top: 15px;
+}
+
+#sa-choice {
+    margin-top: 10px;
+	width: 100%;
+}
+
+#sa-button {
+	margin-top: 60px;
+}
+
+.tab-content {
+	overflow: visible;
+}
+
+/*
+.form-horizontal .control-label {
+	text-align: center;
+}
+*/
+#saPane, #manualPane {
+//	margin-top: -20px;
+	padding: 15px 15px 1px;
+	background-color: #eee;
+}
+/*
+.form-group .col-offset-2 {
+	overflow: auto;
+}
+*/
+/*
+#logout {
+	margin-top: -45px;
+}
+
+#sign {
+	margin-top: 20px;
+}
+*/
+.tool-urn {
+	margin-top: 40px;
+}
+
+#toolGroup {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+#userGroup {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+#timeGroup {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+#userName {
+	width: 75%;
+}
+
+#logout {
+	width: 23%;
+}
+
+#password-container {
+//	margin-top: 60px;
+	padding-top: 0;
+}
+
+#authorityName,
+#userName,
+#toolName {
+	cursor: default;
+	margin-bottom: 0;
+}
+
+#error-box {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+#sign {
+    margin-top: 15px;
+}

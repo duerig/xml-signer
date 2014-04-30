@@ -1,29 +1,35 @@
-<div class="hero-unit">
-  <h1>GENI Authorization Tool</h1>
+<div class="row">
+<div class="col-sm-10 col-sm-offset-1">
+  <h2>GENI Authorization Tool</h2>
+<!--
   <p>The GENI Authorization Tool allows you to authorize applications to speak on your behalf to allocate slices or slivers. Your GENI certificate and private key are stored in your web browser and your passphrase is never transmitted over the network.</p>
-  <p class="tool-info">To authorize, enter the passphrase for your GENI private key below. Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
-  <h5 class="tool-info">Tool URN: <%= id %></h5>
-  <div class="tool-info" id="error-box"></div>
-  <form class="tool-info form-horizontal" role="form" id="private">
-    <div class="form-group">
-      <label class="col-lg-2 control-label" for="time">Duration (days)</label>
-      <div class="col-lg-10">
-        <input id="time" class="form-control" type="text" value="30">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-lg-2" for="password">Passphrase</label>
-      <div class="col-lg-10">
-        <input id="password" class="form-control" type="password" placeholder="Passphrase">
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-offset-2 col-lg-10">
-        <button id="sign" class="btn btn-primary">Authorize</button>
-      </div>
-    </div>
-  </form>
+-->
+  <p class="tool-info">To authorize this tool, enter the passphrase for your GENI private key below. Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
+  <div class="form-group" id="toolGroup">
+    <h4>Tool ID</h4>
+    <input id="toolName" type="text" class="form-control" value="<%= id %>" disabled>
+  </div>
+  <div class="form-group" id="userGroup">
+    <h4>Identity Provider</h4>
+    <input type="text" class="form-control" id="authorityName" disabled>
+    <h4>User Name</h4>
+    <input type="text" class="form-control pull-left" id="userName" disabled>
+    <button id="logout" class="btn btn-primary btn-sm pull-right" type="button">Change User</button>
+    <div class="clearfix"></div>
+  </div>
+  <div class="form-group" id="timeGroup">
+    <h4>Duration (days)</h4>
+    <input id="time" class="form-control" type="text" value="120">
+  </div>
+  <div class="form-group" id="password-container">
+    <h4>Enter Passphrase</h4>
+    <form id="private">
+    <input type="password" class="form-control" id="password">
+    </form>
+    <div id="error-box"></div>
+  </div>
+  <button id="sign" class="btn btn-primary btn-sm pull-right" name="pass" type="button">Authorize</button>
   <h3 class="no-tool-info">Your Certificate is Saved.</h3>
   <p class="no-tool-info">When you choose to authorize a tool, you will be redirected here to complete the process.</p>
-  <button id="logout" class="btn btn-default pull-right">Delete Certificate</button>
+</div>
 </div>
