@@ -41,13 +41,18 @@ nobase_dist_wwwdata_DATA = \
 	emulab.js \
 	error.js \
 	geni-auth.js \
+	index.html \
 	lib/amelia.min.css \
-	lib/bootstrap/css/bootstrap-responsive.css \
-	lib/bootstrap/css/bootstrap-responsive.min.css \
+	lib/bootstrap/css/bootstrap-theme.css \
+	lib/bootstrap/css/bootstrap-theme.css.map \
+	lib/bootstrap/css/bootstrap-theme.min.css \
 	lib/bootstrap/css/bootstrap.css \
+	lib/bootstrap/css/bootstrap.css.map \
 	lib/bootstrap/css/bootstrap.min.css \
-	lib/bootstrap/img/glyphicons-halflings-white.png \
-	lib/bootstrap/img/glyphicons-halflings.png \
+	lib/bootstrap/fonts/glyphicons-halflings-regular.eot \
+	lib/bootstrap/fonts/glyphicons-halflings-regular.svg \
+	lib/bootstrap/fonts/glyphicons-halflings-regular.ttf \
+	lib/bootstrap/fonts/glyphicons-halflings-regular.woff \
 	lib/bootstrap/js/bootstrap.js \
 	lib/bootstrap/js/bootstrap.min.js \
 	lib/cyborg.min.css \
@@ -101,6 +106,7 @@ nobase_dist_wwwdata_DATA = \
 	lib/xmldom/dom.js \
 	lib/xmldom/sax.js \
 	require-jquery.js \
+	signer.css \
 	template/authorize.html \
 	template/credential.txt \
 	template/no-key.html \

@@ -1,3 +1,12 @@
+xml-signer (0.7) unstable; urgency=low
+
+  * Overhaul visual appearance
+  * Change default expiration time to 120 days
+  * Allow tool to pass in a user key to use by default
+  * Add support for unencrypted keys
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Fri, 16 May 2014 12:28:00 +0000
+
 xml-signer (0.6) unstable; urgency=low
 
   * Switch to forge for encryption and verification
