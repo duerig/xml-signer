@@ -373,9 +373,25 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       if (window.opener) {
         window.opener.postMessage(data, '*');
       } else {
-        $.post(backTo, data, function() {
-          window.location.replace(backTo);
-        });
+        // This can't be the only way to redirect with POST, sigh...
+        var backForm = document.createElement('form');
+        backForm.method = 'POST';
+        backForm.action = backTo;
+        backForm.name = 'backto';
+
+        var idInput = document.createElement('input');
+        idInput.type = 'text';
+        idInput.name = 'data_id';
+        idInput.value = data.id;
+
+        var credentialInput = document.createElement('input');
+        credentialInput.type = 'text';
+        credentialInput.name = 'data_credential';
+        credentialInput.value = data.credential;
+
+        backForm.appendChild(idInput);
+        backForm.appendChild(credentialInput);
+        backForm.submit();
       }
     }
     catch (e)
