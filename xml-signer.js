@@ -59,7 +59,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   }
 
   var debugCert = null;
-  var toolId = null;
+  var toolId = $('script#tool_id').text();
   var speakerCert = null;
   var xmlTemplate = _.template(xmlText);
   var authorizeTemplate = _.template(authorizeText);
@@ -69,8 +69,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var certWindow;
   var userId = 'urn:publicid:IDN+jonlab.testbed.emulab.net+user+jld';
   var defaultMA = { url: null, name: null};
-
-  var myCert = $('script#tool_cert').text();
+  var myCert = $('script#tool_cert').text().replace(/\\n/g, "\n");
   var backTo = $('script#backto').text();
 
   function initialize()
@@ -79,7 +78,9 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     promise.then(function (response) {
       parseSaList(response);
       var params = getQueryParams(window.location.search);
-      toolId = params.id;
+      if (toolId == '') {
+        toolId = params.id;
+      }
       if (toolId)
       {
         var data = { ready: true };
