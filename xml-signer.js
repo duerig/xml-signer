@@ -59,7 +59,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   }
 
   var debugCert = null;
-  var toolId = null;
+  var toolId = $('script#tool_id').text();
   var speakerCert = null;
   var xmlTemplate = _.template(xmlText);
   var authorizeTemplate = _.template(authorizeText);
@@ -69,25 +69,32 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
   var certWindow;
   var userId = 'urn:publicid:IDN+jonlab.testbed.emulab.net+user+jld';
   var defaultMA = { url: null, name: null};
+  var myCert = $('script#tool_cert').text().replace(/\\n/g, "\n");
+  var backTo = $('script#backto').text();
 
   function initialize()
   {
     var promise = $.get('https://www.emulab.net/protogeni/boot/salist.txt');
     promise.then(function (response) {
-       parseSaList(response);
+      parseSaList(response);
       var params = getQueryParams(window.location.search);
-      toolId = params.id;
+      if (toolId == '') {
+        toolId = params.id;
+      }
       if (toolId)
       {
-	window.addEventListener('message', messageToolCert, false);
-	var data = {
-          ready: true
-	};
-	window.opener.postMessage(data, '*');
+        var data = { ready: true };
+        if (window.opener) {
+          window.addEventListener('message', messageToolCert, false);
+          window.opener.postMessage(data, '*');
+        } else {
+          var fake_event = { data: { certificate: myCert, tool: true } }
+          messageToolCert(fake_event);
+        }
       }
       else
       {
-	messageToolCert(null);
+        messageToolCert(null);
       }
     }, function (error) {
       console.log('Error fetching SA List: ', error);
@@ -357,14 +364,36 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       sig.signatureNode = "//*[local-name(.)='signatures']";
       if (certList.length > 0)
       {
-	sig.keyInfoProvider = new GENIKeyInfo(certList);
+        sig.keyInfoProvider = new GENIKeyInfo(certList);
       }
       sig.computeSignature(xml);
       var data = {
-	id: toolId,
-	credential: sig.getSignedXml()
+        id: toolId,
+        credential: sig.getSignedXml()
       };
-      window.opener.postMessage(data, '*');
+      if (window.opener) {
+        window.opener.postMessage(data, '*');
+      } else {
+        // This can't be the only way to redirect with POST, sigh...
+        var backForm = document.createElement('form');
+        backForm.method = 'POST';
+        backForm.action = backTo;
+        backForm.name = 'backto';
+
+        var idInput = document.createElement('input');
+        idInput.type = 'text';
+        idInput.name = 'data_id';
+        idInput.value = data.id;
+
+        var credentialInput = document.createElement('input');
+        credentialInput.type = 'text';
+        credentialInput.name = 'data_credential';
+        credentialInput.value = data.credential;
+
+        backForm.appendChild(idInput);
+        backForm.appendChild(credentialInput);
+        backForm.submit();
+      }
     }
     catch (e)
     {
@@ -484,13 +513,13 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     var params = {};
     var re = /[?&]?([^=]+)=([^&]*)/g;
     var tokens = re.exec(qs);
-    
+
     while (tokens) {
       params[decodeURIComponent(tokens[1])]
         = decodeURIComponent(tokens[2]);
       tokens = re.exec(qs);
     }
-    
+
     return params;
   }
 
