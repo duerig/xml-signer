@@ -106,4 +106,5 @@ nobase_dist_wwwdata_DATA = \
 	template/no-key.html \
 	text.js \
 	tool.html \
-	xml-signer.js
+	xml-signer.js \
+	index.php
