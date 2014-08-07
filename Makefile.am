@@ -114,3 +114,5 @@ nobase_dist_wwwdata_DATA = \
 	tool.html \
 	xml-signer.js \
 	index.php
+
+doc_DATA = README.md AUTHORS
