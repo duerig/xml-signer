@@ -42,6 +42,7 @@ nobase_dist_wwwdata_DATA = \
 	error.js \
 	geni-auth.js \
 	index.html \
+	index.php \
 	lib/amelia.min.css \
 	lib/bootstrap/css/bootstrap-theme.css \
 	lib/bootstrap/css/bootstrap-theme.css.map \
@@ -112,5 +113,6 @@ nobase_dist_wwwdata_DATA = \
 	template/no-key.html \
 	text.js \
 	tool.html \
-	xml-signer.js \
-	index.php
+	xml-signer.js
+
+doc_DATA = README.md AUTHORS
