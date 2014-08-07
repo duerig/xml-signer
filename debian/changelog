@@ -1,3 +1,10 @@
+xml-signer (0.9) unstable; urgency=low
+
+  * Preserve newline while posting speaks_for credential
+  * Add index.php to install target
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Thu, 07 Aug 2014 15:24:00 +0000
+
 xml-signer (0.8) unstable; urgency=low
 
   * Allow tools to post id, cert to the signer and redirect back to the
