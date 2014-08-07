@@ -381,12 +381,12 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
         backForm.name = 'backto';
 
         var idInput = document.createElement('input');
-        idInput.type = 'text';
+        idInput.type = 'hidden';
         idInput.name = 'data_id';
         idInput.value = data.id;
 
         var credentialInput = document.createElement('input');
-        credentialInput.type = 'text';
+        credentialInput.type = 'hidden';
         credentialInput.name = 'data_credential';
         credentialInput.value = data.credential;
 
