@@ -46,6 +46,24 @@ Parameters:
 
 Returns: The authorization window
 
+## Alternative Tool API Without Pop Up Window
+
+Alternatively, a simple PHP page index.php accepts HTTP POST from your tool client and renders the authorisation window interface. Upon user completes the authorisation process, it will redirect back to your tool client tool with a proper speaks-for credential attached. This work flow will eliminate the authorisation being launched via a pop up window.
+
+### POST to index.php
+
+Parameters
+
+- *tool_id:* Identifier of the tool
+- *backto:* URL that tool would receive speaks-for credential upon successful authorisation.
+- *tool_cert:* PEM-encoded certificate of the tool.
+
+### Accept POST in 'backto'
+
+Parameters
+
+- *data_credential:* Speaks-for credential generated upon successful authorisation.
+
 ## Member Authority API ##
 
 Member Authorities may optionally present a web interface that lets
