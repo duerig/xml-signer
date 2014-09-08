@@ -87,6 +87,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
         if (window.opener) {
           window.addEventListener('message', messageToolCert, false);
           window.opener.postMessage(data, '*');
+	    console.log('posting ready message');
         } else {
           var fake_event = { data: { certificate: myCert, tool: true } }
           messageToolCert(fake_event);
@@ -184,6 +185,19 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     }
     return result;
   }
+
+    function wrapCertificates(list)
+    {
+	var result = "";
+	var i = 0;
+	for (; i < list.length; i += 1)
+	{
+	    result += "-----BEGIN CERTIFICATE-----\n";
+	    result += list[i];
+	    result += "-----END CERTIFICATE-----\n";
+	}
+	return result;
+    }
 
   function extractKey(pem)
   {
@@ -339,6 +353,10 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     };
   }
 
+    var speaksForCredential;
+    var decryptedPrivateKey;
+    var userSecret;
+
   function clickSign(event)
   {
     event.preventDefault();
@@ -358,6 +376,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     try
     {
       var decrypted = forge.pki.decryptRsaPrivateKey(encryptedKey, password);
+	decryptedPrivateKey = decrypted;
       var sig = new SignedXml();
       sig.addReference("//*[local-name(.)='credential']");
       sig.signingKey = decrypted;
@@ -367,12 +386,17 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
         sig.keyInfoProvider = new GENIKeyInfo(certList);
       }
       sig.computeSignature(xml);
+	speaksForCredential = sig.getSignedXml();
+      var userToken = generateUserToken(speakerCert);
       var data = {
         id: toolId,
-        credential: sig.getSignedXml()
+        credential: speaksForCredential,
+	userToken: userToken,
+	userCertificate: wrapCertificates(certList)
       };
       if (window.opener) {
         window.opener.postMessage(data, '*');
+	  console.log('posting credential');
       } else {
         // This can't be the only way to redirect with POST, sigh...
         var backForm = document.createElement('form');
@@ -433,15 +457,62 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function messageAck(event)
   {
-    if (event.source === window.opener && event.data && event.data.id &&
-        event.data.id === toolId && event.data.ack)
-    {
-      window.close();
-    }
+      console.log('messageAck');
+      if (event.source === window.opener && event.data && event.data.id &&
+	  event.data.id === toolId)
+      {
+	  if (event.data.ack)
+	  {
+	      window.close();
+	  }
+	  else if (event.data.toolToken)
+	  {
+	      sendAuthorizationToken(event.data.toolToken);
+	  }
+      }
+  }
+
+  function sendAuthorizationToken(toolToken)
+  {
+      var encryptedCredential = encryptWithSecrets(userSecret, getToolSecret(toolToken));
+      var data = {
+	  id: toolId,
+	  encryptedCredential: encryptedCredential,
+	  credential: speaksForCredential
+      };
+      window.opener.postMessage(data, '*');
+      console.log('posting auth token');
+  }
+
+  function generateUserToken(speakerCert)
+  {
+      var secretBytes = forge.random.getBytesSync(32);
+      userSecret = forge.util.bytesToHex(secretBytes);
+      var p7 = forge.pkcs7.createEnvelopedData();
+      var cert = forge.pki.certificateFromPem(wrapCertificates([speakerCert]));
+      p7.addRecipient(cert);
+      p7.content = forge.util.createBuffer(userSecret);
+      p7.encrypt();
+      return forge.pkcs7.messageToPem(p7);
+  }
+
+  function getToolSecret(toolToken)
+  {
+      var p7 = forge.pkcs7.messageFromPem(toolToken);
+      p7.decrypt(p7.recipients[0], decryptedPrivateKey);
+      return p7.content.toString();
+  }
+
+  function encryptWithSecrets(userSecret, toolSecret)
+  {
+      var md = forge.md.sha256.create();
+      md.update(speaksForCredential + userSecret + toolSecret);
+      return md.digest().toHex();
   }
 
   function messageCert(event)
   {
+      console.log('messageCert');
     if (event.source === certWindow && event.data && event.data.authority)
     {
       if (event.data.certificate)
@@ -483,6 +554,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       credential: cred
     };
     window.opener.postMessage(data, '*');
+      console.log('posting reflect cred');
     window.removeEventListener('message', messageCert);
     window.addEventListener('message', messageAck);
   }

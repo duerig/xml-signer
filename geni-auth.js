@@ -3,8 +3,29 @@ var genilib = {};
 genilib.trustedHost = 'https://www.emulab.net';
 genilib.trustedPath = '/protogeni/speaks-for/index.html';
 
-genilib.authorize = function(id, cert, callback, defaultMA, userBundle)
+genilib.authorize = function(idOrObject, cert, callback, defaultMA, userBundle)
 {
+    var id;
+    var authenticate;
+
+    // If the user invokes with just a single object, it is a dictionary of options
+    if (typeof(idOrObject) === 'object')
+    {
+	id = idOrObject.id;
+	cert = idOrObject.toolCertificate;
+	callback = idOrObject.complete;
+	defaultMA = idOrObject.defaultMA;
+	userBundle = idOrObject.userBundle;
+	authenticate = idOrObject.authenticate;
+	console.log('set args based on dictionary');
+    }
+    else
+    {
+	id = idOrObject;
+    }
+
+    shouldAuthenticate = (authenticate !== undefined)
+
   var wrapper = {};
 
   wrapper.other = window.open(genilib.trustedHost + genilib.trustedPath +
@@ -21,7 +42,8 @@ genilib.authorize = function(id, cert, callback, defaultMA, userBundle)
     {
       data = {
         certificate: cert,
-        tool: true
+        tool: true,
+	auth: shouldAuthenticate
       };
       if (userBundle)
       {
@@ -40,19 +62,49 @@ genilib.authorize = function(id, cert, callback, defaultMA, userBundle)
              event.origin === genilib.trustedHost &&
              event.data.id && event.data.id === id && event.data.credential)
     {
+	wrapper.credential = event.data.credential;
+	wrapper.credentialId = event.data.id;
+	wrapper.authenticationToken = event.data.userToken;
+	wrapper.encryptedCredential = event.data.encryptedCredential;
+	if (shouldAuthenticate && event.data.userCertificate)
+	{
+	    console.log('authenticating');
+	    authenticate(event.data.userCertificate, wrapper.authenticationToken, wrapper.toolAuthSuccess, wrapper.toolAuthFailure);
+	}
+	else
+	{
+	    console.log('sendAck');
+	    wrapper.sendAck();
+	}
+    }
+  };
+
+    wrapper.sendAck = function () {
       window.removeEventListener('message', wrapper.listener, false);
 //      wrapper.other.removeEventListener('close', wrapper.close, false);
 
       data = {
-        id: event.data.id,
+        id: wrapper.credentialId,
         ack: true
       };
       console.log('Sending ack to ' + genilib.trustedHost);
       wrapper.other.postMessage(data, genilib.trustedHost);
 
-      callback(event.data.credential);
-    }
-  };
+      callback(wrapper.credential, wrapper.encryptedCredential);
+    };
+
+    wrapper.toolAuthSuccess = function (toolToken) {
+	data = {
+	    id: wrapper.credentialId,
+	    toolToken: toolToken
+	};
+	console.log('Sending tool token to ' + genilib.trustedHost);
+	wrapper.other.postMessage(data, genilib.trustedHost);
+    };
+
+    wrapper.toolAuthFailure = function () {
+	wrapper.sendAck();
+    };
 
   wrapper.close = function (event) {
     window.removeEventListener('message', wrapper.message, false);
