@@ -423,6 +423,10 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     {
       console.log('Error signing credential:', e);
       error.show();
+      $('#password-container #password').on('input', function() {
+        error.hide();
+        $('#password-container #password').off('input');
+      })
     }
   }
 
