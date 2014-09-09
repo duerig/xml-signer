@@ -285,6 +285,18 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       $('#password-container').show();
     }
     getCertFields(certList);
+    $('#advancedCheck').change(function() {
+      if ($('.toggleAdvanced').hasClass('toggled')) {
+        $('.toggleAdvanced').each(function() {
+          $(this).removeClass('toggled');
+        });
+      }
+      else {
+        $('.toggleAdvanced').each(function() {
+          $(this).addClass('toggled');
+        });
+      }
+    })
   }
 
   /**

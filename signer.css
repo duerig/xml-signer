@@ -101,6 +101,6 @@
     margin-bottom: 0;
 }
 
-#sign {
-    margin-top: 15px;
+.toggleAdvanced.toggled {
+	display: none;
 }
