@@ -58,6 +58,14 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     });
   }
 
+  function parseSaListJson(str) {
+    $.each(str['identity-providers'], function() {
+      saList.push({ name: this.urn.split('+')[1],
+        url: this['web-cert-url'],
+        icon: this.icon })
+    })
+  }
+
   var debugCert = null;
   var toolId = $('script#tool_id').text();
   var speakerCert = null;
@@ -74,9 +82,9 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function initialize()
   {
-    var promise = $.get('https://www.emulab.net/protogeni/boot/salist.txt');
+    var promise = $.get('https://www.emulab.net/protogeni/boot/salist.json');
     promise.then(function (response) {
-      parseSaList(response);
+      parseSaListJson(response);
       var params = getQueryParams(window.location.search);
       if (toolId == '') {
         toolId = params.id;
@@ -236,6 +244,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     var choice = $('#sa-choice');
     var i = 0;
     var defaultFound = false;
+
     for (i = 0; i < saList.length; i += 1)
     {
       var attrs = 'value="' + saList[i].url + '"';
@@ -252,6 +261,15 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       choice.append('<option value="' + defaultMA.url + '" selected="selected">'
                     + defaultMA.name + '</option>');
     }
+
+    $('#default-choice-1').click(function() {
+      $('#sa-choice').val('https://www.emulab.net/getsslcertjs.php3');
+      $('#sa-button').click();
+    });
+    $('#default-choice-2').click(function() {
+      $('#sa-choice').val('https://portal.geni.net/secure/loadcert.php');
+      $('#sa-button').click();
+    });
   }
 
   function initAuthorize()
@@ -285,6 +303,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
       $('#password-container').show();
     }
     getCertFields(certList);
+
     $('#advancedCheck').change(function() {
       if ($('.toggleAdvanced').hasClass('toggled')) {
         $('.toggleAdvanced').each(function() {
@@ -296,7 +315,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
           $(this).addClass('toggled');
         });
       }
-    })
+    });
   }
 
   /**

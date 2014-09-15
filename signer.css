@@ -25,10 +25,6 @@
 	width: 100%;
 }
 
-#sa-button {
-	margin-top: 60px;
-}
-
 .tab-content {
 	overflow: visible;
 }
@@ -103,4 +99,44 @@
 
 .toggleAdvanced.toggled {
 	display: none;
+}
+
+#default-choices {
+	margin-top: 10px;
+	width: 100%;
+	height: 140px;
+}
+
+#default-choice-1 {
+	height: 140px;
+	width: 265px;
+	background-color: white;
+	cursor: pointer;
+	border: 1px solid #555;
+}
+
+#default-choice-1 img {
+	height: 65px;
+	margin: 35px 0 0 15px;
+}
+
+#default-choice-2 {
+	height: 140px;
+	width: 265px;
+	background-color: white;
+	cursor: pointer;
+	border: 1px solid #555;
+}
+
+#default-choice-2 img {
+	height: 120px;
+	margin: 10px 0 0 65px;
+}
+
+.orText {
+	position: absolute;
+	width: 50px;
+	top: 150px;
+	left: 259px;
+	text-align: center;
 }
