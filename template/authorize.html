@@ -4,29 +4,31 @@
 <!--
   <p>The GENI Authorization Tool allows you to authorize applications to speak on your behalf to allocate slices or slivers. Your GENI certificate and private key are stored in your web browser and your passphrase is never transmitted over the network.</p>
 -->
-  <p class="tool-info">To authorize this tool, enter the passphrase for your GENI private key below. Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
-  <div class="form-group" id="toolGroup">
-    <h4>Tool ID</h4>
-    <input id="toolName" type="text" class="form-control" value="<%= id %>" disabled>
-  </div>
-  <div class="form-group toggleAdvanced toggled" id="userGroup">
-    <h4>Identity Provider</h4>
-    <input type="text" class="form-control" id="authorityName" disabled>
-    <h4>User Name</h4>
-    <input type="text" class="form-control pull-left" id="userName" disabled>
-    <button id="logout" class="btn btn-primary btn-sm pull-right" type="button">Change User</button>
-    <div class="clearfix"></div>
-  </div>
-  <div class="form-group toggleAdvanced toggled" id="timeGroup">
-    <h4>Duration (days)</h4>
-    <input id="time" class="form-control" type="text" value="120">
-  </div>
-  <div class="form-group" id="password-container">
-    <h4>Enter Passphrase</h4>
-    <form id="private">
-    <input type="password" class="form-control" id="password">
-    </form>
-    <div id="error-box"></div>
+  <p class="tool-info"><div class="password-text">To authorize this tool, enter the passphrase for your GENI private key below. </div>Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
+  <div class="groups-container">
+    <div class="form-group" id="toolGroup">
+      <h4>Tool ID</h4>
+      <input id="toolName" type="text" class="form-control" value="<%= id %>" disabled>
+    </div>
+    <div class="form-group toggleAdvanced toggled" id="userGroup">
+      <h4>Identity Provider</h4>
+      <input type="text" class="form-control" id="authorityName" disabled>
+      <h4>User Name</h4>
+      <input type="text" class="form-control pull-left" id="userName" disabled>
+      <button id="logout" class="btn btn-primary btn-sm pull-right" type="button">Change User</button>
+      <div class="clearfix"></div>
+    </div>
+    <div class="form-group toggleAdvanced toggled" id="timeGroup">
+      <h4>Duration (days)</h4>
+      <input id="time" class="form-control" type="text" value="120">
+    </div>
+    <div class="form-group" id="password-container">
+      <h4>Enter Passphrase</h4>
+      <form id="private">
+      <input type="password" class="form-control" id="password">
+      </form>
+      <div id="error-box"></div>
+    </div>
   </div>
   <input type="checkbox" id="advancedCheck" class="pull-left" style="margin-right:5px"> Show Advanced
   <button id="sign" class="btn btn-primary btn-sm pull-right" name="pass" type="button">Authorize</button>
