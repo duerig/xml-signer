@@ -297,10 +297,12 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     if (! isEncrypted(encryptedKey))
     {
       $('#password-container').hide();
+      $('.password-text').hide();
     }
     else
     {
       $('#password-container').show();
+      $('.password-text').show();
     }
     getCertFields(certList);
 
