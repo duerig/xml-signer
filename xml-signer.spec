@@ -1,11 +1,11 @@
 Name:           xml-signer
-Version:        1.0.1
+Version:        1.1
 Release:        1%{?dist}
 Summary:        Credential signer for GENI
 BuildArch:      noarch
 License:        GENI Public License
 URL:            https://github.com/duerig/xml-signer
-Source0:        https://github.com/duerig/xml-signer/xml-signer-1.0.1.tar.gz
+Source0:        https://github.com/duerig/xml-signer/xml-signer-1.1.tar.gz
 Group:          Applications/Internet
 
 # BuildRequires: gettext
@@ -123,6 +123,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(-, root, root) %{_datadir}/%{name}/www/xml-signer.js
 
 %changelog
+* Tue Mar 31 2015 Tom Mitchell <tmitchell@bbn.com> - 1.1-1%{?dist}
+- Styling changes
 * Thu Sep 25 2014 Tom Mitchell <tmitchell@bbn.com> - 1.0.1-1%{?dist}
 - RPM packaging
 * Fri Sep 19 2014 Tom Mitchell <tmitchell@bbn.com> - 1.0-1%{?dist}

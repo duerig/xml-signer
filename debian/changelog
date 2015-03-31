@@ -1,3 +1,9 @@
+xml-signer (1.1) unstable; urgency=low
+
+  * Styling changes
+
+ -- Tom Mitchell <tmitchel@bbn.com>  Tue, 31 Mar 2015 18:03:13 +0000
+
 xml-signer (1.0.1) unstable; urgency=low
 
   * RPM packaging
