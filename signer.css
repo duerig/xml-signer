@@ -57,19 +57,13 @@
 	margin-top: 40px;
 }
 
-#toolGroup {
+#toolGroup, #userGroup, #timeGroup, #password-container {
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
 
-#userGroup {
-	margin-bottom: 0;
-	padding-bottom: 0;
-}
-
-#timeGroup {
-	margin-bottom: 0;
-	padding-bottom: 0;
+.groups-container {
+	margin-bottom: 15px;
 }
 
 #userName {
@@ -103,6 +97,7 @@
 
 #default-choices {
 	margin-top: 10px;
+	margin-bottom: 40px;
 	width: 100%;
 	height: 140px;
 }

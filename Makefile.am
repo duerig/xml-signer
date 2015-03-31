@@ -123,5 +123,7 @@ nobase_dist_wwwdata_DATA = \
 
 dist_doc_DATA = \
 	AUTHORS \
-	INSTALL.centos \
 	README.md
+
+doc_DATA = \
+	INSTALL.centos
