@@ -209,18 +209,22 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function extractKey(pem)
   {
+    var pkcs1_begin = "-----BEGIN RSA PRIVATE KEY-----";
+    var pkcs1_end   = "-----END RSA PRIVATE KEY-----";
+    var pkcs8_begin = "-----BEGIN PRIVATE KEY-----";
+    var pkcs8_end   = "-----END PRIVATE KEY-----";
     var inKey = false;
     var key = "";
     var lines = pem.split('\n');
     var i = 0;
     for (i = 0; i < lines.length; i += 1)
     {
-      if (lines[i] === "-----BEGIN RSA PRIVATE KEY-----")
+      if (lines[i] === pkcs1_begin || lines[i] === pkcs8_begin)
       {
         key = lines[i] + '\n';
         inKey = true;
       }
-      else if (lines[i] === "-----END RSA PRIVATE KEY-----")
+      else if (lines[i] === pkcs1_end || lines[i] === pkcs8_end)
       {
         key += lines[i] + '\n';
         inKey = false;
