@@ -2,7 +2,7 @@ xml-signer (1.2) unstable; urgency=low
 
   * Support PKCS#8 private keys
 
- -- Tom Mitchell <tmitchell@bbn.com>  Fri, 17 Mar 2015 14:06:00 +0000
+ -- Tom Mitchell <tmitchel@bbn.com>  Fri, 17 Apr 2015 14:06:00 +0000
 
 xml-signer (1.1) unstable; urgency=low
 
