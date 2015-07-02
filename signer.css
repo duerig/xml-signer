@@ -24,7 +24,7 @@
     margin-top: 10px;
     margin-left: 10%;
     margin-right: 10%;
-	width: 80%;
+    width: 80%;
 }
 
 .tab-content {
@@ -118,13 +118,14 @@
 }
 */
 #default-choice-2 {
+    width: 50%;
     margin-left: 25%;
     margin-right: 25%;
     margin-top: 20px;
     margin-bottom: 20px;
-	background-color: white;
-	cursor: pointer;
-	border: 1px solid #555;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid #555;
 }
 
 #default-choice-2 img {

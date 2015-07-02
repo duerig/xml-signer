@@ -4,11 +4,16 @@
 <!--
   <p>The GENI Authorization Tool allows you to authorize applications to speak on your behalf to allocate slices or slivers. Your GENI certificate and private key are stored in your web browser and your passphrase is never transmitted over the network.</p>
 -->
-  <p class="tool-info"><div class="password-text">To authorize this tool, enter the passphrase for your GENI private key below. </div>Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
+  <p class="tool-info"><span class="password-text">To authorize this tool, enter the passphrase for your GENI private key below. </span>Once you authorize, the tool will be able to act on your behalf when talking to GENI infrastructure. Only authorize if you trust the tool.</p>
   <div class="groups-container">
     <div class="form-group" id="toolGroup">
       <h4>Tool ID</h4>
       <input id="toolName" type="text" class="form-control" value="<%= id %>" disabled>
+    </div>
+    <div class="checkbox">
+      <label>
+	<input type="checkbox" id="advancedCheck"> Show Advanced
+      </label>
     </div>
     <div class="form-group toggleAdvanced toggled" id="userGroup">
       <h4>Identity Provider</h4>
@@ -30,7 +35,11 @@
       <div id="error-box"></div>
     </div>
   </div>
-  <input type="checkbox" id="advancedCheck" class="pull-left" style="margin-right:5px"> Show Advanced
+  <div id="rememberCheckContainer" class="checkbox pull-left">
+    <label>
+      <input type="checkbox" id="rememberCheck"> Remember This Decision
+    </label>
+  </div>
   <button id="sign" class="btn btn-primary btn-sm pull-right" name="pass" type="button">Authorize</button>
   <h3 class="no-tool-info">Your Certificate is Saved.</h3>
   <p class="no-tool-info">When you choose to authorize a tool, you will be redirected here to complete the process.</p>

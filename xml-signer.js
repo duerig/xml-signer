@@ -300,13 +300,28 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     window.addEventListener('message', messageAck);
     if (! isEncrypted(encryptedKey))
     {
+      var shouldAccept = false;
+      try {
+	var accepted = JSON.parse(window.localStorage.accepted);
+	if (accepted[toolId] !== undefined)
+	{
+	  $('#time').val(accepted[toolId]);
+	  shouldAccept = true;
+	}
+      } catch (e) {}
+      if (shouldAccept)
+      {
+	clickSign();
+      }
       $('#password-container').hide();
       $('.password-text').hide();
+      $('#rememberCheckContainer').show();
     }
     else
     {
       $('#password-container').show();
       $('.password-text').show();
+      $('#rememberCheckContainer').hide();
     }
     getCertFields(certList);
 
@@ -396,7 +411,27 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
 
   function clickSign(event)
   {
-    event.preventDefault();
+    if (event)
+    {
+      event.preventDefault();
+    }
+    if (! isEncrypted(encryptedKey) && $('#rememberCheck')[0].checked)
+    {
+      try {
+	var acceptedStr = window.localStorage.accepted;
+	var accepted;
+	if (acceptedStr)
+	{
+	  accepted = JSON.parse(window.localStorage.accepted);
+	}
+	else
+	{
+	  accepted = {};
+	}
+	accepted[toolId] = $('#time').val();
+	window.localStorage.accepted = JSON.stringify(accepted);
+      } catch (e) { }
+    }
     var durationDays = parseInt($('#time').val(), 10);
     var timeOffset = 120 * singleDay;
     if (durationDays && durationDays > 0 && durationDays < 400)
@@ -605,6 +640,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     event.preventDefault();
     try {
       delete window.localStorage.certificateList;
+      delete window.localStorage.accepted;
     } catch (e) {}
     certList = [];
     encryptedKey = "";
