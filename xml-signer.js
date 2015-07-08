@@ -244,6 +244,7 @@ function ($, _, error, forge, sigExport, xmlText, noKeyText, authorizeText) {
     $('#sa-button').click(clickGetCert);
     $('#paste-form').submit(clickPasteCert);
     $('#paste-button').click(clickPasteCert);
+    $('#forgetAll').click(clickLogout);
     window.addEventListener('message', messageCert);
     var choice = $('#sa-choice');
     var i = 0;
