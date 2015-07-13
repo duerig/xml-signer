@@ -1,5 +1,5 @@
 Name:           xml-signer
-Version:        1.2
+Version:        1.3
 Release:        1%{?dist}
 Summary:        Credential signer for GENI
 BuildArch:      noarch
@@ -123,6 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(-, root, root) %{_datadir}/%{name}/www/xml-signer.js
 
 %changelog
+* Mon Jul 13 2015 Tom Mitchell <tmitchell@bbn.com> - 1.3-1%{?dist}
+- Add a clear cookies option during MA selection.
+- Add a checkbox to remember authorize decision. Fix formatting.
+- Make the GENI portal stand alone as the prominent account source.
+  Emulab.net is demoted to dropdown.
 * Fri Apr 17 2015 Tom Mitchell <tmitchell@bbn.com> - 1.2-1%{?dist}
 - Support PKCS#8 private keys
 * Tue Mar 31 2015 Tom Mitchell <tmitchell@bbn.com> - 1.1-1%{?dist}
