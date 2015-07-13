@@ -5,7 +5,7 @@ Summary:        Credential signer for GENI
 BuildArch:      noarch
 License:        GENI Public License
 URL:            https://github.com/duerig/xml-signer
-Source0:        https://github.com/tcmitchell/xml-signer/xml-signer-1.2.tar.gz
+Source0:        https://github.com/tcmitchell/xml-signer/xml-signer-1.3.tar.gz
 Group:          Applications/Internet
 
 # BuildRequires: gettext
