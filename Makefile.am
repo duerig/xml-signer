@@ -13,7 +13,7 @@ edit = sed \
 	-e 's|@pkgsysconfdir[@]|$(pkgsysconfdir)|g' \
 	-e 's|@prefix[@]|$(prefix)|g'
 
-INSTALL.centos etc/apache2.conf: Makefile
+INSTALL.centos etc/apache2.conf etc/httpd-centos7.conf: Makefile
 	rm -f $@ $@.tmp
 	srcdir=''; \
 	  test -f ./$@.in || srcdir=$(srcdir)/; \
@@ -22,6 +22,7 @@ INSTALL.centos etc/apache2.conf: Makefile
 	mv $@.tmp $@
 
 etc/apache2.conf: $(srcdir)/etc/apache2.conf.in
+etc/httpd-centos7.conf: $(srcdir)/etc/httpd-centos7.conf.in
 INSTALL.centos: $(srcdir)/INSTALL.centos.in
 
 # Distribute these but do not install them
@@ -29,14 +30,17 @@ EXTRA_DIST = \
 	INSTALL.centos.in \
 	debian \
 	xml-signer.spec \
-	etc/apache2.conf.in
+	etc/apache2.conf.in \
+	etc/httpd-centos7.conf.in
 
 CLEANFILES = \
 	etc/apache2.conf \
+	etc/httpd-centos7.conf \
 	INSTALL.centos
 
 nobase_pkgdata_DATA = \
-	etc/apache2.conf
+	etc/apache2.conf \
+	etc/httpd-centos7.conf
 
 # Put all the files for the web server under 'www' for easy apache
 # configuration.

@@ -1,0 +1,5 @@
+Alias /xml-signer @pkgdatadir@/www
+<Directory @pkgdatadir@/www>
+  AllowOverride None
+  Require all granted
+</Directory>
