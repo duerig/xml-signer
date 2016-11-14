@@ -1,11 +1,11 @@
 Name:           xml-signer
-Version:        1.3
+Version:        1.4
 Release:        1%{?dist}
 Summary:        Credential signer for GENI
 BuildArch:      noarch
 License:        GENI Public License
 URL:            https://github.com/duerig/xml-signer
-Source0:        https://github.com/tcmitchell/xml-signer/xml-signer-1.3.tar.gz
+Source0:        https://github.com/tcmitchell/xml-signer/xml-signer-1.4.tar.gz
 Group:          Applications/Internet
 
 # BuildRequires: gettext
@@ -124,6 +124,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(-, root, root) %{_datadir}/%{name}/www/xml-signer.js
 
 %changelog
+* Mon Nov 14 2016 Tom Mitchell <tcmitchell@users.noreply.github.com> - 1.4-1%{?dist}
+- Add a sample config file for CentOS 7
 * Mon Jul 13 2015 Tom Mitchell <tmitchell@bbn.com> - 1.3-1%{?dist}
 - Add a clear cookies option during MA selection.
 - Add a checkbox to remember authorize decision. Fix formatting.
