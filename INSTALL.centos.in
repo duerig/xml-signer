@@ -4,11 +4,11 @@
 yum install httpd
 service httpd start
 
-2. Configure Apache to serve xml-signer
+2. Configure httpd (Apache) to serve xml-signer
 
-xml-signer ships with a sample Apache configuration file:
+xml-signer ships with a sample CentOS 7 httpd configuration file:
 
-  @pkgdatadir@/etc/apache2.conf
+  @pkgdatadir@/etc/httpd-centos7.conf
 
 You can use this file in several ways to add xml-signer to your Apache
 configuration. If you want to serve it globally you can simply create
@@ -16,15 +16,15 @@ a link in /etc/httpd/conf.d to the sample xml-signer Apache
 configuration file:
 
   # Add file or link in /etc/httpd/conf.d
-  ln -s @pkgdatadir@/etc/apache2.conf /etc/httpd/conf.d/xml-signer.conf
+  ln -s @pkgdatadir@/etc/httpd-centos7.conf /etc/httpd/conf.d/xml-signer.conf
 
 Alternatively, if you want more control over how xml-signer is served,
-you can include the sample xml-signer Apache configuration file in an
+you can include the sample xml-signer httpd configuration file in an
 appropriate Apache configuration file. For instance, if you want to
 server xml-signer only via ssl, add the following line inside the
 VirtualHost definition in /etc/httpd/conf.d/ssl.conf:
 
-  Include @pkgdatadir@/etc/apache2.conf
+  Include @pkgdatadir@/etc/httpd-centos7.conf
 
 Finally, you can serve xml-signer from a location of your choosing by
 copying the contents of the sample xml-signer Apache configuration

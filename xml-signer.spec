@@ -44,6 +44,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(-, root, root) %{_defaultdocdir}/%{name}/README.md
 %attr(-, root, root) %{_defaultdocdir}/%{name}/copyright
 %attr(-, root, root) %{_datadir}/%{name}/etc/apache2.conf
+%attr(-, root, root) %{_datadir}/%{name}/etc/httpd-centos7.conf
 %attr(-, root, root) %{_datadir}/%{name}/www/emulab.html
 %attr(-, root, root) %{_datadir}/%{name}/www/emulab.js
 %attr(-, root, root) %{_datadir}/%{name}/www/error.js
